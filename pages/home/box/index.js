@@ -3,10 +3,10 @@ import cx from "classnames";
 import style from "./style.css";
 
 export default class Box extends Component {
-  handleClick = () => {
+  syncReserve = () => {
     this.props.socketActions.syncReserve({
       boxId: this.props.id,
-      userId: this.props.user.uid
+      userId: this.props.userId
     });
   }
 
@@ -14,14 +14,11 @@ export default class Box extends Component {
     const {
       reservedBox,
       selectedBox,
-      user: {
-        uid
-      },
     } = this.props;
     const reservedAllBox = [];
 
     Object.keys(reservedBox).forEach(userId => {
-      if (userId !== uid) {
+      if (userId !== this.props.userId) {
         reservedAllBox.push(...reservedBox[userId])
       }
     });
@@ -38,7 +35,7 @@ export default class Box extends Component {
     return (
       <div
         className={parentClassName}
-        onClick={this.handleClick}
+        onClick={this.syncReserve}
       />
     )
   }

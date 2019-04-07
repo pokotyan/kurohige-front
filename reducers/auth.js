@@ -1,14 +1,15 @@
 import * as authActions from '../actions/auth';
 
 const initialState = {
-  user: null,
-  isAutherized: false
+  userId: null,
+  roomId: null,
+  rooms: []
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case authActions.UPDATE:
-      return Object.assign({}, state, action.payload);
+      return { ...state, ...action.payload };
     default:
       return state;
   }

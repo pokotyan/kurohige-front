@@ -8,13 +8,15 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case socketActions.RESERVE_UPDATE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         reservedBox: action.payload.reservedBox
-      });
+      };
     case socketActions.SELECTED_UPDATE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selectedBox: action.payload.selectedBox
-      });
+      };
     default:
       return state;
   }

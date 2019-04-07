@@ -2,9 +2,9 @@ import React from "react";
 import { Provider } from "react-redux";
 import App, { Container } from "next/app";
 import withRedux from "next-redux-wrapper";
-import store from './store';
+import store from '../store';
 
-class MyApp extends App {
+class Kurohige extends App {
   static async getInitialProps({ Component, ctx, router }) {
     let pageProps = {};
 
@@ -28,4 +28,4 @@ class MyApp extends App {
   }
 }
 
-export default withRedux(store)(MyApp);
+export default withRedux(store)(Kurohige);
