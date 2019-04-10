@@ -10,7 +10,7 @@ import * as authActions from '../actions/auth';
 import * as socketActions from '../actions/socket';
 
 const getRoomId = () => {
-  let uuid = window.sessionStorage.getItem('room');
+  let uuid = window.sessionStorage.getItem('roomId');
 
   if (uuid) {
     return uuid;
@@ -18,7 +18,7 @@ const getRoomId = () => {
 
   uuid = uuidv1()
 
-  window.sessionStorage.setItem('room', uuid);
+  window.sessionStorage.setItem('roomId', uuid);
 
   return uuid;
 }

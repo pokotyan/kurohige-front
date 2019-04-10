@@ -6,7 +6,8 @@ export default class Box extends Component {
   syncReserve = () => {
     this.props.socketActions.syncReserve({
       boxId: this.props.id,
-      userId: this.props.userId
+      userId: this.props.userId,
+      roomId: this.props.roomId
     });
   }
 
@@ -14,12 +15,15 @@ export default class Box extends Component {
     const {
       reservedBox,
       selectedBox,
+      userId,
+      roomId
     } = this.props;
+    // todo reservedAllBoxもstoreに持つようにしないと別roomのブロードキャストでリセットされる。
     const reservedAllBox = [];
 
-    Object.keys(reservedBox).forEach(userId => {
-      if (userId !== this.props.userId) {
-        reservedAllBox.push(...reservedBox[userId])
+    Object.keys(reservedBox).forEach(id => {
+      if (id.includes(roomId) && !id.includes(userId)) {
+        reservedAllBox.push(...reservedBox[id])
       }
     });
 

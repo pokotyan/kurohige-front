@@ -4,15 +4,26 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'next/router';
 import _ from 'lodash';
 import * as socketActions from "../../actions/socket";
+import * as authActions from "../../actions/auth";
 import Box from './box';
 import css from "./style.css";
 
 class Home extends Component {
   componentDidMount() {
-    const { router, auth, socketActions } = this.props;
+    const { router, auth, socketActions, authActions } = this.props;
+
+    const userId = window.sessionStorage.getItem('session');
+    const roomId = window.sessionStorage.getItem('roomId');
 
     socketActions.watchOnGame({
-      userId: auth.userId
+      userId,
+      roomId
+    });
+
+    // リロード対策
+    authActions.update({
+      userId,
+      roomId
     });
   }
 
@@ -35,6 +46,7 @@ class Home extends Component {
               id={id}
               key={id}
               userId={userId}
+              roomId={roomId}
               reservedBox={socket.reservedBox}
               selectedBox={socket.selectedBox}
               socketActions={socketActions}
@@ -53,6 +65,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   socketActions: bindActionCreators(socketActions, dispatch),
+  authActions: bindActionCreators(authActions, dispatch),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

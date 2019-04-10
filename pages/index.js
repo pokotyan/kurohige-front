@@ -16,6 +16,16 @@ class App extends Component {
     router.push('/home');
   }
 
+  selectRoom = (roomId) => () => {
+    const { router, authActions } = this.props;
+
+    window.sessionStorage.setItem('roomId', roomId);
+    authActions.update({
+      roomId
+    });
+    router.push('/home');
+  }
+
   createSession = () => {
     let uuid = window.sessionStorage.getItem('session');
 
@@ -56,8 +66,11 @@ class App extends Component {
         >
           ルームに参加してゲーム開始
         </div>
-        {auth.rooms.map(room => (
-          <div key={room}>{room}</div>
+        {auth.rooms.map(roomId => (
+          <div
+            key={roomId}
+            onClick={this.selectRoom(roomId)}
+          >{roomId}</div>
         ))}
       </div>
     )

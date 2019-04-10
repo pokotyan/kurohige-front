@@ -70,9 +70,9 @@ function* createRoom() {
 function* watchOnGame() {
   while (true) {
     try {
-      const { payload: { userId } } = yield take(socketActions.WATCH_ON_GAME);
+      const { payload: { userId, roomId } } = yield take(socketActions.WATCH_ON_GAME);
       // redisから現在の状態を取得し、storeに反映させる初期化のタスク。
-      yield fork(initGameStatus, { userId });
+      yield fork(initGameStatus, { userId, roomId });
 
       // ボックスを選択した際、自身の選択ボックスの更新と、その選択したボックス情報を他ブラウザにブロードキャストするタスク。
       yield fork(syncGameStatus);
@@ -88,21 +88,23 @@ function* watchOnGame() {
   }
 }
 
-function* initGameStatus({ userId }) {
+function* initGameStatus({ userId, roomId }) {
+  console.log(userId, roomId);
+
   // ブラウザがリロードされたときのためにredisから値を取ってきて、reservedBoxのstore更新
-  yield socket.emit('initReserve');
+  yield socket.emit('initReserve', { roomId });
   // ブラウザがリロードされたときのためにredisから値を取ってきて、selectedBoxのstore更新
-  yield socket.emit('initSelected', { userId });
+  yield socket.emit('initSelected', { userId, roomId });
 }
 
 function* syncGameStatus() {
   while (true) {
-    const { payload: { boxId, userId } } = yield take(socketActions.SYNC_RESERVE);
+    const { payload: { boxId, userId, roomId } } = yield take(socketActions.SYNC_RESERVE);
 
     // reserveBoxのredisを更新、更新した値をbroadcastして、他ブラウザのreseveBoxのstore更新
-    yield socket.emit('broadCastReserve', { boxId, userId });
+    yield socket.emit('broadCastReserve', { boxId, userId, roomId });
     // selectedBoxのredisを更新、自身のブラウザのselectedBoxのstore更新
-    yield socket.emit('updateSelected', { boxId, userId });
+    yield socket.emit('updateSelected', { boxId, userId, roomId });
   }
 }
 
