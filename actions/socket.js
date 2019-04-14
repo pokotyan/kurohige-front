@@ -14,8 +14,8 @@ export const DELETE_ROOM = Symbol(
   'DELETE_ROOM'
 );
 
-export const SYNC_RESERVE = Symbol(
-  'SYNC_RESERVE'
+export const SYNC_GAME_STATUS = Symbol(
+  'SYNC_GAME_STATUS'
 );
 
 
@@ -51,8 +51,8 @@ export const deleteRoom = payload => ({
   payload
 });
 
-export const syncReserve = payload => ({
-  type: SYNC_RESERVE,
+export const syncGameStatus = payload => ({
+  type: SYNC_GAME_STATUS,
   payload
 });
 

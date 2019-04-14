@@ -3,7 +3,7 @@ import cx from "classnames";
 import style from "./style.css";
 
 export default class Box extends Component {
-  syncReserve = () => {
+  syncGameStatus = () => {
     const {
       socketActions,
       id,
@@ -13,7 +13,7 @@ export default class Box extends Component {
     } = this.props;
     const nextTurn = p1 ? 'p2' : 'p1';
 
-    socketActions.syncReserve({
+    socketActions.syncGameStatus({
       boxId: id,
       userId,
       roomId,
@@ -56,7 +56,7 @@ export default class Box extends Component {
       isMyTurn ? (
         <div
           className={parentClassName}
-          onClick={this.syncReserve}
+          onClick={this.syncGameStatus}
         />
       ) : (
         <div

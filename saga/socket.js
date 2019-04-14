@@ -106,7 +106,7 @@ function* initGameStatus({ userId, roomId }) {
 
 function* syncGameStatus() {
   while (true) {
-    const { payload: { boxId, userId, roomId, nextTurn } } = yield take(socketActions.SYNC_RESERVE);
+    const { payload: { boxId, userId, roomId, nextTurn } } = yield take(socketActions.SYNC_GAME_STATUS);
 
     // reserveBoxのredisを更新、更新した値をbroadcastして、他ブラウザのreseveBoxのstore更新
     yield socket.emit('broadCastReserve', { boxId, userId, roomId, nextTurn });
@@ -140,7 +140,14 @@ function subscribeForGame() {
       emit(socketActions.selectedUpdate({ selectedBox }));
     }
 
-    const broadCastReserveHandler = async (reservedBox) => {
+    const broadCastReserveHandler = async ({ reservedBox, roomId }) => {
+      const myRoomId = window.sessionStorage.getItem('roomId');
+
+      // 他の部屋のブロードキャストは反映しない
+      if (myRoomId !== roomId) {
+        return;
+      }
+
       emit(socketActions.reserveUpdate({ reservedBox }));
     }
 
