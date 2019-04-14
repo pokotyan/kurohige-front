@@ -13,8 +13,10 @@ class Home extends Component {
   componentDidMount() {
     const { router, auth, socketActions, authActions, systemActions } = this.props;
 
+    // @todo この情報sessionStorageに入れるからstoreに入れなくていい気がする
     const userId = window.sessionStorage.getItem('userId');
     const roomId = window.sessionStorage.getItem('roomId');
+    const userIds = window.sessionStorage.getItem('userIds');
     const p1UserId = window.sessionStorage.getItem('p1');
     const p2UserId = window.sessionStorage.getItem('p2');
     const nextTurn = window.sessionStorage.getItem('nextTurn');
@@ -27,7 +29,8 @@ class Home extends Component {
     // リロード対策
     authActions.update({
       userId,
-      roomId
+      roomId,
+      userIds: JSON.parse(userIds)
     });
 
     systemActions.setPlayer({

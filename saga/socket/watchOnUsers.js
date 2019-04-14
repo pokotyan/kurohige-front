@@ -47,6 +47,7 @@ function subscribe() {
         return;
       }
 
+      window.sessionStorage.setItem('userIds', JSON.stringify(userIds));      
       emit(authActions.update({ userIds }));
     }
 

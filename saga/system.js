@@ -74,8 +74,10 @@ function* setPlayer2(roomId) {
   yield fork(setPlayer, 'p2');
 
   // 先攻はランダム
-  // ＠todo 先攻がどっちかをブロードキャストしないといけない
-  // yield put(systemActions.updateNextTurn(_.sample(['p1', 'p2'])));
+  yield put(socketActions.syncTurn({
+    nextTurn: _.sample(['p1', 'p2']),
+    roomId,
+  }));
 
   // プレイヤー2まで参加したらそのルームには参加できなくするため消す
   yield put(socketActions.deleteRoom({
@@ -97,22 +99,9 @@ function* setPlayer(player) {
   }));
 }
 
-function* updateNextTurn() {
-  for (;;) {
-    const {
-      payload: nextTurn
-    } = yield take(systemActions.UPDATE_NEXT_TURN);
-
-    window.sessionStorage.setItem('nextTurn', nextTurn);
-
-    yield put(systemActions.setNextTurn(nextTurn));
-  }
-}
-
 export default function* rootSaga() {
   yield all([
     fork(createRoom),
     fork(selectRoom),
-    fork(updateNextTurn),
   ]);
 }

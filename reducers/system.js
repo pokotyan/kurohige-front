@@ -9,11 +9,16 @@ export default (state = initialState, action) => {
       return {
         ...state, ...action.payload
       };
-    case systemActions.SET_NEXT_TURN:
-      return {
-        ...state,
-        ...{ nextTurn: action.payload }
-      };
+    case systemActions.SET_NEXT_TURN: {
+      if (action.payload) {
+        return {
+          ...state,
+          ...{ nextTurn: action.payload }
+        };  
+      }
+
+      return state;
+    }
     default:
       return state;
   }

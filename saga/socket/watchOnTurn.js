@@ -48,6 +48,7 @@ function subscribe() {
         return;
       }
 
+      window.sessionStorage.setItem('nextTurn', nextTurn);
       emit(systemActions.setNextTurn(nextTurn));      
     }
 
