@@ -19,7 +19,7 @@ class Home extends Component {
     const p2UserId = window.sessionStorage.getItem('p2');
     const nextTurn = window.sessionStorage.getItem('nextTurn');
 
-    socketActions.watchOnGame({
+    socketActions.watchOnSelect({
       userId,
       roomId
     });
@@ -43,7 +43,8 @@ class Home extends Component {
       socket,
       auth: {
         userId,
-        roomId
+        roomId,
+        userIds
       },
       system: {
         p1,
@@ -55,11 +56,14 @@ class Home extends Component {
 
     const me = p1 ? 'p1' : 'p2';
     const isMyTurn = nextTurn === me;
+    const waitingPlayer = userIds.length < 2;
 
     return (
       <div>
         roomId: {roomId}
-        {isMyTurn ? ' あなたのターン' : ' 敵のターン'}
+        {waitingPlayer ? ' ユーザーを待っています' : (
+          isMyTurn ? ' あなたのターン' : ' 敵のターン'
+        )}
         <div className={css.container}>
           {_.range(14 * 14).map(id => (
             <Box

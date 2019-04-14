@@ -18,9 +18,8 @@ export const SYNC_GAME_STATUS = Symbol(
   'SYNC_GAME_STATUS'
 );
 
-
-export const WATCH_ON_GAME = Symbol(
-  'WATCH_ON_GAME'
+export const WATCH_ON_SELECT = Symbol(
+  'WATCH_ON_SELECT'
 );
 
 export const RESERVE_UPDATE = Symbol(
@@ -29,6 +28,14 @@ export const RESERVE_UPDATE = Symbol(
 
 export const SELECTED_UPDATE = Symbol(
   'SELECTED_UPDATE'
+);
+
+export const WATCH_ON_USERS = Symbol(
+  'WATCH_ON_USERS'
+);
+
+export const SYNC_USER_ROOM_RELATION = Symbol(
+  'SYNC_USER_ROOM_RELATION'
 );
 
 export const watchOnRooms = payload => ({
@@ -56,8 +63,8 @@ export const syncGameStatus = payload => ({
   payload
 });
 
-export const watchOnGame = payload => ({
-  type: WATCH_ON_GAME,
+export const watchOnSelect = payload => ({
+  type: WATCH_ON_SELECT,
   payload
 })
 
@@ -70,3 +77,13 @@ export const selectedUpdate = payload => ({
   type: SELECTED_UPDATE,
   payload
 });
+
+export const watchOnUsers = payload => ({
+  type: WATCH_ON_USERS,
+  payload
+});
+
+export const syncUserRoomRelation = payload => ({
+  type: SYNC_USER_ROOM_RELATION,
+  payload
+})

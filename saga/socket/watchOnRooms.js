@@ -10,7 +10,7 @@ function* watchOnRooms() {
   while (true) {
     try {
       yield take(socketActions.WATCH_ON_ROOMS);
-      yield fork(syncRooms);
+      yield fork(writeRooms);
       yield socket.emit('getRooms');
     } catch (err) {
       console.error('socket error:', err)
@@ -18,8 +18,8 @@ function* watchOnRooms() {
   }
 }
 
-function* syncRooms() {
-  const channel = yield call(subscribeForRooms, socket);
+function* writeRooms() {
+  const channel = yield call(subscribe, socket);
 
   while (true) {
     const action = yield take(channel);
@@ -28,7 +28,7 @@ function* syncRooms() {
   }
 }
 
-function subscribeForRooms() {
+function subscribe() {
   return eventChannel(emit => {
     const getRoomsReceiveHandler = async (rooms) => {
       emit(authActions.update({ rooms }));

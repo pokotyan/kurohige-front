@@ -49,6 +49,7 @@ class App extends Component {
     });
 
     socketActions.watchOnRooms();
+    socketActions.watchOnUsers();
   }
 
   render() {

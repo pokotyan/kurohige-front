@@ -1,14 +1,16 @@
 import { fork, all } from 'redux-saga/effects';
-import system from './system'
-import watchOnGame from './socket/watchOnGame'
-import watchOnRooms from './socket/watchOnRooms'
-import auth from './auth'
+import system from './system';
+import watchOnSelect from './socket/watchOnSelect';
+import watchOnRooms from './socket/watchOnRooms';
+import watchOnUsers from './socket/watchOnUsers';
+import auth from './auth';
 
 export default function* rootSaga() {
   yield all([
     fork(system),
-    fork(watchOnGame),
+    fork(watchOnSelect),
     fork(watchOnRooms),
+    fork(watchOnUsers),
     fork(auth),
   ]);
 }

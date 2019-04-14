@@ -7,13 +7,13 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
 
-function* watchOnGame() {
+function* watchOnSelect() {
   while (true) {
     try {
-      const { payload: { userId, roomId } } = yield take(socketActions.WATCH_ON_GAME);
+      const { payload: { userId, roomId } } = yield take(socketActions.WATCH_ON_SELECT);
       yield fork(initGameStatus, { userId, roomId });
       yield fork(syncGameStatus);
-      yield fork(writeStatus);
+      yield fork(writeGameStatus);
     } catch (err) {
       console.error('socket error:', err)
     }
@@ -34,8 +34,8 @@ function* syncGameStatus() {
   }
 }
 
-function* writeStatus() {
-  const channel = yield call(subscribeForGame, socket);
+function* writeGameStatus() {
+  const channel = yield call(subscribe, socket);
 
   while (true) {
     const action = yield take(channel);
@@ -44,7 +44,7 @@ function* writeStatus() {
   }
 }
 
-function subscribeForGame() {
+function subscribe() {
   return eventChannel(emit => {
     const initReserveHandler = async (reservedBox) => {
       emit(socketActions.reserveUpdate({ reservedBox }));
@@ -98,6 +98,6 @@ function subscribeForGame() {
 
 export default function* rootSaga() {
   yield all([
-    fork(watchOnGame),
+    fork(watchOnSelect),
   ]);
 }

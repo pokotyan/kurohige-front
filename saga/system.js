@@ -63,9 +63,7 @@ function* setPlayer1() {
 
   window.sessionStorage.setItem('p1', userId);
 
-  yield put(systemActions.setPlayer({
-    p1: true
-  }));
+  yield fork(setPlayer, 'p1');
 }
 
 function* setPlayer2(roomId) {
@@ -73,9 +71,7 @@ function* setPlayer2(roomId) {
 
   window.sessionStorage.setItem('p2', userId);
 
-  yield put(systemActions.setPlayer({
-    p2: true
-  }));
+  yield fork(setPlayer, 'p2');
 
   // 先攻はランダム
   // ＠todo 先攻がどっちかをブロードキャストしないといけない
@@ -84,6 +80,20 @@ function* setPlayer2(roomId) {
   // プレイヤー2まで参加したらそのルームには参加できなくするため消す
   yield put(socketActions.deleteRoom({
     roomId
+  }));
+}
+
+function* setPlayer(player) {
+  const userId = window.sessionStorage.getItem('userId');
+  const roomId = window.sessionStorage.getItem('roomId');
+
+  yield put(socketActions.syncUserRoomRelation({
+    userId,
+    roomId
+  }));
+
+  yield put(systemActions.setPlayer({
+    [player]: true
   }));
 }
 

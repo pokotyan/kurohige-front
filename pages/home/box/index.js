@@ -31,7 +31,6 @@ export default class Box extends Component {
       p2,
       nextTurn
     } = this.props;
-    // todo enemyBoxもstoreに持つようにしないと別roomのブロードキャストでリセットされる。
     const enemyBox = [];
 
     Object.keys(reservedBox).forEach(id => {
