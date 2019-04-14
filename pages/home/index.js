@@ -53,9 +53,13 @@ class Home extends Component {
       socketActions
     } = this.props;
 
+    const me = p1 ? 'p1' : 'p2';
+    const isMyTurn = nextTurn === me;
+
     return (
       <div>
         roomId: {roomId}
+        {isMyTurn ? ' あなたのターン' : ' 敵のターン'}
         <div className={css.container}>
           {_.range(14 * 14).map(id => (
             <Box

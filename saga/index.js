@@ -1,12 +1,14 @@
 import { fork, all } from 'redux-saga/effects';
 import system from './system'
-import socket from './socket'
+import watchOnGame from './socket/watchOnGame'
+import watchOnRooms from './socket/watchOnRooms'
 import auth from './auth'
 
 export default function* rootSaga() {
   yield all([
     fork(system),
-    fork(socket),
+    fork(watchOnGame),
+    fork(watchOnRooms),
     fork(auth),
   ]);
 }
