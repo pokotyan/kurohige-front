@@ -1,4 +1,5 @@
-import { fork, all } from 'redux-saga/effects';
+import { put, fork, all } from 'redux-saga/effects';
+import * as socketActions from '../actions/socket';
 import system from './system';
 import watchOnSelect from './socket/watchOnSelect';
 import watchOnRooms from './socket/watchOnRooms';
@@ -15,4 +16,7 @@ export default function* rootSaga() {
     fork(watchOnTurn),
     fork(auth),
   ]);
+  yield put(socketActions.watchOnRooms());
+  yield put(socketActions.watchOnUsers());
+  yield put(socketActions.watchOnTurn());
 }

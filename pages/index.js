@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import uuidv1 from 'uuid/v1';
 import * as systemActions from "../actions/system";
 import * as authActions from "../actions/auth";
-import * as socketActions from "../actions/socket";
 
 class App extends Component {
   createRoom = () => {
@@ -41,16 +40,12 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    const { router, authActions, socketActions } = this.props;
+    const { router, authActions } = this.props;
     const uuid = this.createSession();
 
     authActions.saveSession({
       userId: uuid
     });
-
-    socketActions.watchOnRooms();
-    socketActions.watchOnUsers();
-    socketActions.watchOnTurn();
   }
 
   render() {
@@ -84,7 +79,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   systemActions: bindActionCreators(systemActions, dispatch),
   authActions: bindActionCreators(authActions, dispatch),
-  socketActions: bindActionCreators(socketActions, dispatch),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
