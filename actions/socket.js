@@ -14,8 +14,8 @@ export const DELETE_ROOM = Symbol(
   'DELETE_ROOM'
 );
 
-export const SYNC_GAME_STATUS = Symbol(
-  'SYNC_GAME_STATUS'
+export const SYNC_SELECT_STATUS = Symbol(
+  'SYNC_SELECT_STATUS'
 );
 
 export const WATCH_ON_SELECT = Symbol(
@@ -66,8 +66,8 @@ export const deleteRoom = payload => ({
   payload
 });
 
-export const syncGameStatus = payload => ({
-  type: SYNC_GAME_STATUS,
+export const syncSelectStatus = payload => ({
+  type: SYNC_SELECT_STATUS,
   payload
 });
 

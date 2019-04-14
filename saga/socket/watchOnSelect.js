@@ -11,30 +11,30 @@ function* watchOnSelect() {
   while (true) {
     try {
       const { payload: { userId, roomId } } = yield take(socketActions.WATCH_ON_SELECT);
-      yield fork(initGameStatus, { userId, roomId });
-      yield fork(syncGameStatus);
-      yield fork(writeGameStatus);
+      yield fork(initSelectStatus, { userId, roomId });
+      yield fork(syncSelectStatus);
+      yield fork(writeSelectStatus);
     } catch (err) {
       console.error('socket error:', err)
     }
   }
 }
 
-function* initGameStatus({ userId, roomId }) {
+function* initSelectStatus({ userId, roomId }) {
   yield socket.emit('initReserve', { roomId });
   yield socket.emit('initSelected', { userId, roomId });
 }
 
-function* syncGameStatus() {
+function* syncSelectStatus() {
   while (true) {
-    const { payload: { boxId, userId, roomId } } = yield take(socketActions.SYNC_GAME_STATUS);
+    const { payload: { boxId, userId, roomId } } = yield take(socketActions.SYNC_SELECT_STATUS);
 
     yield socket.emit('broadCastReserve', { boxId, userId, roomId });
     yield socket.emit('updateSelected', { boxId, userId, roomId });
   }
 }
 
-function* writeGameStatus() {
+function* writeSelectStatus() {
   const channel = yield call(subscribe, socket);
 
   while (true) {

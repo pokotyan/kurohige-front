@@ -22,8 +22,8 @@ function* syncUserRoomRelation() {
   while (true) {
     const { payload: { userId, roomId } } = yield take(socketActions.SYNC_USER_ROOM_RELATION);
 
-    yield socket.emit('broadCastUser', { userId, roomId });
-    yield socket.emit('updateUser', { userId, roomId });
+    yield socket.emit('broadCastPlayer', { userId, roomId });
+    yield socket.emit('updatePlayer', { userId, roomId });
   }
 }
 
@@ -39,7 +39,7 @@ function* writeUserRoomRelation() {
 
 function subscribe() {
   return eventChannel(emit => {
-    const updateGameMemberHandler = async ({ userIds, roomId }) => {
+    const updatePlayer = async ({ userIds, roomId }) => {
       const myRoomId = window.sessionStorage.getItem('roomId');
 
       // 他の部屋のブロードキャストは反映しない
@@ -50,10 +50,10 @@ function subscribe() {
       emit(authActions.update({ userIds }));
     }
 
-    socket.on('updateGameMember', updateGameMemberHandler);
+    socket.on('updatePlayer:receive', updatePlayer);
     
     const unsubscribe = () => {
-      socket.off('updateGameMember', updateGameMemberHandler);
+      socket.off('updatePlayer:receive', updatePlayer);
     }
 
     return unsubscribe;
