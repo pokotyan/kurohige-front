@@ -4,10 +4,19 @@ import style from "./style.css";
 
 export default class Box extends Component {
   syncReserve = () => {
-    this.props.socketActions.syncReserve({
-      boxId: this.props.id,
-      userId: this.props.userId,
-      roomId: this.props.roomId
+    const {
+      socketActions,
+      id,
+      userId,
+      roomId,
+      p1,
+    } = this.props;
+
+    socketActions.syncReserve({
+      boxId: id,
+      userId,
+      roomId,
+      nextTurn: p1 ? 'p2' : 'p1',
     });
   }
 
@@ -17,17 +26,20 @@ export default class Box extends Component {
       selectedBox,
       userId,
       roomId,
+      p1,
+      p2,
+      nextTurn
     } = this.props;
-    // todo reservedAllBoxもstoreに持つようにしないと別roomのブロードキャストでリセットされる。
-    const reservedAllBox = [];
+    // todo enemyBoxもstoreに持つようにしないと別roomのブロードキャストでリセットされる。
+    const enemyBox = [];
 
     Object.keys(reservedBox).forEach(id => {
       if (id.includes(roomId) && !id.includes(userId)) {
-        reservedAllBox.push(...reservedBox[id])
+        enemyBox.push(...reservedBox[id])
       }
     });
 
-    const isReserved = reservedAllBox.includes(this.props.id);
+    const isReserved = enemyBox.includes(this.props.id);
     const isSelected = selectedBox.includes(this.props.id);
 
     let parentClassName = cx({
@@ -36,11 +48,20 @@ export default class Box extends Component {
       [style.isSelected]: isSelected,
     });
 
+    const me = p1 ? 'p1' : 'p2';
+    const isMyTurn = (!enemyBox.length && !selectedBox.length) || nextTurn === me;
+
     return (
-      <div
-        className={parentClassName}
-        onClick={this.syncReserve}
-      />
+      isMyTurn ? (
+        <div
+          className={parentClassName}
+          onClick={this.syncReserve}
+        />
+      ) : (
+        <div
+          className={parentClassName}
+        />        
+      )
     )
   }
 }

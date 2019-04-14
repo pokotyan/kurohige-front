@@ -42,6 +42,11 @@ class Home extends Component {
         userId,
         roomId
       },
+      system: {
+        p1,
+        p2,
+        nextTurn
+      },
       socketActions
     } = this.props;
 
@@ -55,6 +60,9 @@ class Home extends Component {
               key={id}
               userId={userId}
               roomId={roomId}
+              p1={p1}
+              p2={p2}
+              nextTurn={nextTurn}
               reservedBox={socket.reservedBox}
               selectedBox={socket.selectedBox}
               socketActions={socketActions}
@@ -69,6 +77,7 @@ class Home extends Component {
 const mapStateToProps = state => ({
   auth: state.auth,
   socket: state.socket,
+  system: state.system,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,4 +1,5 @@
 import uuidv1 from 'uuid/v1';
+import _ from 'lodash';
 import {
   put,
   take,
@@ -9,7 +10,7 @@ import * as systemActions from '../actions/system';
 import * as authActions from '../actions/auth';
 import * as socketActions from '../actions/socket';
 
-const getRoomId = () => {
+const _getRoomId = () => {
   let uuid = window.sessionStorage.getItem('roomId');
 
   if (uuid) {
@@ -27,7 +28,7 @@ function* createRoom() {
   for (;;) {
     yield take(systemActions.CREATE_ROOM);
 
-    const roomId = getRoomId();
+    const roomId = _getRoomId();
 
     yield put(socketActions.createRoom({
       roomId
@@ -75,6 +76,10 @@ function* setPlayer2(roomId) {
   yield put(systemActions.setPlayer({
     p2: true
   }));
+
+  // 先攻はランダム
+  // ＠todo 先攻がどっちかをブロードキャストしないといけない
+  // yield put(systemActions.updateNextTurn(_.sample(['p1', 'p2'])));
 
   // プレイヤー2まで参加したらそのルームには参加できなくするため消す
   yield put(socketActions.deleteRoom({

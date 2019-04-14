@@ -9,6 +9,11 @@ export default (state = initialState, action) => {
       return {
         ...state, ...action.payload
       };
+    case systemActions.UPDATE_NEXT_TURN:
+      return {
+        ...state,
+        ...{ nextTurn: action.payload }
+      };
     default:
       return state;
   }

@@ -2,6 +2,7 @@ import { put, take, all, fork, call, select } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import * as socketActions from '../actions/socket';
 import * as authActions from '../actions/auth';
+import * as systemActions from '../actions/system';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
@@ -105,12 +106,12 @@ function* initGameStatus({ userId, roomId }) {
 
 function* syncGameStatus() {
   while (true) {
-    const { payload: { boxId, userId, roomId } } = yield take(socketActions.SYNC_RESERVE);
+    const { payload: { boxId, userId, roomId, nextTurn } } = yield take(socketActions.SYNC_RESERVE);
 
     // reserveBoxのredisを更新、更新した値をbroadcastして、他ブラウザのreseveBoxのstore更新
-    yield socket.emit('broadCastReserve', { boxId, userId, roomId });
+    yield socket.emit('broadCastReserve', { boxId, userId, roomId, nextTurn });
     // selectedBoxのredisを更新、自身のブラウザのselectedBoxのstore更新
-    yield socket.emit('updateSelected', { boxId, userId, roomId });
+    yield socket.emit('updateSelected', { boxId, userId, roomId, nextTurn });
   }
 }
 
@@ -147,11 +148,16 @@ function subscribeForGame() {
       emit(authActions.update({ rooms }));
     }
 
+    const updateNextTurnHandler = async (nextTurn) => {
+      emit(systemActions.updateNextTurn(nextTurn));      
+    }
+
     socket.on('initReserve:receive', initReserveHandler);
     socket.on('initSelected:receive', initSelectedHandler);
     socket.on('updateSelected:receive', updateSelectedHandler);
     socket.on('broadCastReserve:receive', broadCastReserveHandler);
     socket.on('getRooms:receive', getRoomsReserveHandler);
+    socket.on('update:nextTurn', updateNextTurnHandler);
 
     const unsubscribe = () => {
       socket.off('initReserve:receive', initReserveHandler);

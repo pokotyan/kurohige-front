@@ -10,6 +10,10 @@ export const SET_PLAYER = Symbol(
   'SET_PLAYER'
 );
 
+export const UPDATE_NEXT_TURN = Symbol(
+  'UPDATE_NEXT_TURN'
+);
+
 export const createRoom = payload => ({
   type: CREATE_ROOM,
   payload
@@ -22,5 +26,10 @@ export const selectRoom = payload => ({
 
 export const setPlayer = payload => ({
   type: SET_PLAYER,
+  payload
+});
+
+export const updateNextTurn = payload => ({
+  type: UPDATE_NEXT_TURN,
   payload
 });
