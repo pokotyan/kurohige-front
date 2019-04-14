@@ -16,7 +16,7 @@ export default class Box extends Component {
       reservedBox,
       selectedBox,
       userId,
-      roomId
+      roomId,
     } = this.props;
     // todo reservedAllBoxもstoreに持つようにしないと別roomのブロードキャストでリセットされる。
     const reservedAllBox = [];

@@ -8,21 +8,21 @@ import * as authActions from "../actions/auth";
 import * as socketActions from "../actions/socket";
 
 class App extends Component {
-  start = () => {
+  createRoom = () => {
     const { router, systemActions } = this.props;
 
-    systemActions.gameStart();
+    systemActions.createRoom();
 
     router.push('/home');
   }
 
   selectRoom = (roomId) => () => {
-    const { router, authActions } = this.props;
+    const { router, authActions, systemActions } = this.props;
 
-    window.sessionStorage.setItem('roomId', roomId);
-    authActions.update({
+    systemActions.selectRoom({
       roomId
     });
+
     router.push('/home');
   }
 
@@ -57,13 +57,11 @@ class App extends Component {
     return (
       <div>
         <div
-          onClick={this.start}
+          onClick={this.createRoom}
         >
           ルームを作成してゲーム開始
         </div>
-        <div
-          onClick={this.start}
-        >
+        <div>
           ルームに参加してゲーム開始
         </div>
         {auth.rooms.map(roomId => (

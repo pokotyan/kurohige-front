@@ -23,9 +23,9 @@ const getRoomId = () => {
   return uuid;
 }
 
-function* gameStart() {
+function* createRoom() {
   for (;;) {
-    yield take(systemActions.GAME_START);
+    yield take(systemActions.CREATE_ROOM);
 
     const roomId = getRoomId();
 
@@ -36,11 +36,55 @@ function* gameStart() {
     yield put(authActions.update({
       roomId,
     }));
+    yield fork(setPlayer1);
   }
+}
+
+function* selectRoom() {
+  for (;;) {
+    const {
+      payload: {
+        roomId
+      }
+    } = yield take(systemActions.SELECT_ROOM);
+
+    window.sessionStorage.setItem('roomId', roomId);
+    authActions.update({
+      roomId
+    });
+
+    yield fork(setPlayer2, roomId);
+  }
+}
+
+function* setPlayer1() {
+  const userId = window.sessionStorage.getItem('session');
+
+  window.sessionStorage.setItem('p1', userId);
+
+  yield put(systemActions.setPlayer({
+    p1: true
+  }));
+}
+
+function* setPlayer2(roomId) {
+  const userId = window.sessionStorage.getItem('session');
+
+  window.sessionStorage.setItem('p2', userId);
+
+  yield put(systemActions.setPlayer({
+    p2: true
+  }));
+
+  // プレイヤー2まで参加したらそのルームには参加できなくするため消す
+  yield put(socketActions.deleteRoom({
+    roomId
+  }));
 }
 
 export default function* rootSaga() {
   yield all([
-    fork(gameStart),
+    fork(createRoom),
+    fork(selectRoom),
   ]);
 }

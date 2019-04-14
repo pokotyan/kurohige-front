@@ -58,6 +58,14 @@ function* createRoom() {
   }
 }
 
+function* deleteRoom() {
+  while (true) {
+    const { payload: { roomId } } = yield take(socketActions.DELETE_ROOM);
+
+    yield socket.emit('deleteRoom', { roomId });
+  }
+}
+
 
 
 
@@ -89,8 +97,6 @@ function* watchOnGame() {
 }
 
 function* initGameStatus({ userId, roomId }) {
-  console.log(userId, roomId);
-
   // ブラウザがリロードされたときのためにredisから値を取ってきて、reservedBoxのstore更新
   yield socket.emit('initReserve', { roomId });
   // ブラウザがリロードされたときのためにredisから値を取ってきて、selectedBoxのstore更新
@@ -163,6 +169,7 @@ export default function* rootSaga() {
   yield all([
     fork(watchOnRooms),
     fork(createRoom),
+    fork(deleteRoom),
     fork(watchOnGame),
   ]);
 }

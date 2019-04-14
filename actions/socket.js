@@ -10,6 +10,10 @@ export const CREATE_ROOM = Symbol(
   'CREATE_ROOM'
 );
 
+export const DELETE_ROOM = Symbol(
+  'DELETE_ROOM'
+);
+
 export const SYNC_RESERVE = Symbol(
   'SYNC_RESERVE'
 );
@@ -39,6 +43,11 @@ export const gameStart = payload => ({
 
 export const createRoom = payload => ({
   type: CREATE_ROOM,
+  payload
+});
+
+export const deleteRoom = payload => ({
+  type: DELETE_ROOM,
   payload
 });
 
