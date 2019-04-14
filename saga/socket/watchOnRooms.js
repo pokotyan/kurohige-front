@@ -30,20 +30,20 @@ function* writeRooms() {
 
 function subscribe() {
   return eventChannel(emit => {
-    const getRoomsReceiveHandler = async (rooms) => {
+    const getRoomsReceive = async (rooms) => {
       emit(authActions.update({ rooms }));
     }
 
-    const broadCastRoomsReceiveHandler = async (rooms) => {
+    const broadCastRoomsReceive = async (rooms) => {
       emit(authActions.update({ rooms }));
     }
 
-    socket.on('getRooms:receive', getRoomsReceiveHandler);
-    socket.on('broadCastRooms:receive', broadCastRoomsReceiveHandler);
+    socket.on('getRooms:receive', getRoomsReceive);
+    socket.on('broadCastRooms:receive', broadCastRoomsReceive);
     
     const unsubscribe = () => {
-      socket.off('getRooms:receive', getRoomsReserveHandler);
-      socket.off('broadCastRooms:receive', broadCastRoomsReceiveHandler);
+      socket.off('getRooms:receive', getRoomsReserve);
+      socket.off('broadCastRooms:receive', broadCastRoomsReceive);
     }
 
     return unsubscribe;

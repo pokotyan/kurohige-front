@@ -46,19 +46,19 @@ function* writeSelectStatus() {
 
 function subscribe() {
   return eventChannel(emit => {
-    const initReserveHandler = async (reservedBox) => {
+    const initReserve = async (reservedBox) => {
       emit(socketActions.reserveUpdate({ reservedBox }));
     }
 
-    const initSelectedHandler = async (selectedBox) => {
+    const initSelected = async (selectedBox) => {
       emit(socketActions.selectedUpdate({ selectedBox }));
     }
 
-    const updateSelectedHandler = async (selectedBox) => {
+    const updateSelected = async (selectedBox) => {
       emit(socketActions.selectedUpdate({ selectedBox }));
     }
 
-    const broadCastReserveHandler = async ({ reservedBox, roomId }) => {
+    const broadCastReserve = async ({ reservedBox, roomId }) => {
       const myRoomId = window.sessionStorage.getItem('roomId');
 
       // 他の部屋のブロードキャストは反映しない
@@ -69,22 +69,22 @@ function subscribe() {
       emit(socketActions.reserveUpdate({ reservedBox }));
     }
 
-    const getRoomsReserveHandler = async (rooms) => {
+    const getRoomsReserve = async (rooms) => {
       emit(authActions.update({ rooms }));
     }
 
-    socket.on('initReserve:receive', initReserveHandler);
-    socket.on('initSelected:receive', initSelectedHandler);
-    socket.on('updateSelected:receive', updateSelectedHandler);
-    socket.on('broadCastReserve:receive', broadCastReserveHandler);
-    socket.on('getRooms:receive', getRoomsReserveHandler);
+    socket.on('initReserve:receive', initReserve);
+    socket.on('initSelected:receive', initSelected);
+    socket.on('updateSelected:receive', updateSelected);
+    socket.on('broadCastReserve:receive', broadCastReserve);
+    socket.on('getRooms:receive', getRoomsReserve);
 
     const unsubscribe = () => {
-      socket.off('initReserve:receive', initReserveHandler);
-      socket.off('initSelected:receive', initSelectedHandler);
-      socket.off('updateSelected:receive', updateSelectedHandler);
-      socket.off('broadCastReserve:receive', broadCastReserveHandler);
-      socket.off('getRooms:receive', getRoomsReserveHandler);
+      socket.off('initReserve:receive', initReserve);
+      socket.off('initSelected:receive', initSelected);
+      socket.off('updateSelected:receive', updateSelected);
+      socket.off('broadCastReserve:receive', broadCastReserve);
+      socket.off('getRooms:receive', getRoomsReserve);
     }
 
     return unsubscribe;
