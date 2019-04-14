@@ -41,15 +41,19 @@ function* writeTurn() {
 function subscribe() {
   return eventChannel(emit => {
     const updateNextTurn = async ({ nextTurn, roomId }) => {
-      const myRoomId = window.sessionStorage.getItem('roomId');
+      try {
+        const myRoomId = window.sessionStorage.getItem('roomId');
 
-      // 他の部屋のブロードキャストは反映しない
-      if (myRoomId !== roomId) {
+        // 他の部屋のブロードキャストは反映しない
+        if (myRoomId !== roomId) {
+          return;
+        }
+  
+        window.sessionStorage.setItem('nextTurn', nextTurn);
+        emit(systemActions.setNextTurn(nextTurn));  
+      } catch (e) {
         return;
       }
-
-      window.sessionStorage.setItem('nextTurn', nextTurn);
-      emit(systemActions.setNextTurn(nextTurn));      
     }
 
     socket.on('updateNextTurn:receive', updateNextTurn);

@@ -40,15 +40,19 @@ function* writeUserRoomRelation() {
 function subscribe() {
   return eventChannel(emit => {
     const updatePlayer = async ({ userIds, roomId }) => {
-      const myRoomId = window.sessionStorage.getItem('roomId');
+      try {
+        const myRoomId = window.sessionStorage.getItem('roomId');
 
-      // 他の部屋のブロードキャストは反映しない
-      if (myRoomId !== roomId) {
+        // 他の部屋のブロードキャストは反映しない
+        if (myRoomId !== roomId) {
+          return;
+        }
+  
+        window.sessionStorage.setItem('userIds', JSON.stringify(userIds));      
+        emit(authActions.update({ userIds }));  
+      } catch (e) {
         return;
       }
-
-      window.sessionStorage.setItem('userIds', JSON.stringify(userIds));      
-      emit(authActions.update({ userIds }));
     }
 
     socket.on('updatePlayer:receive', updatePlayer);

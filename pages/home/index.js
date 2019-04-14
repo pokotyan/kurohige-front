@@ -41,6 +41,47 @@ class Home extends Component {
     systemActions.setNextTurn(nextTurn);
   }
 
+  Boxlist = () => {
+    const {
+      socket: {
+        reservedBox,
+        selectedBox,
+      },
+      auth: {
+        userId,
+        roomId,
+      },
+      system: {
+        p1,
+        p2,
+        nextTurn
+      },
+      socketActions
+    } = this.props;
+    const boxList = [];
+
+    for (let y = 1; y < 15; y++) {  
+      for (let x = 1; x < 15; x++) {
+        boxList.push(
+          <Box
+            id={`${y}:${x}`}
+            key={`${y}:${x}`}
+            userId={userId}
+            roomId={roomId}
+            p1={p1}
+            p2={p2}
+            nextTurn={nextTurn}
+            reservedBox={reservedBox}
+            selectedBox={selectedBox}
+            socketActions={socketActions}
+          />
+        );
+      }
+    }
+
+    return boxList;
+  }
+
   render() {
     const {
       socket,
@@ -68,20 +109,7 @@ class Home extends Component {
           isMyTurn ? ' あなたのターン' : ' 敵のターン'
         )}
         <div className={css.container}>
-          {_.range(14 * 14).map(id => (
-            <Box
-              id={id}
-              key={id}
-              userId={userId}
-              roomId={roomId}
-              p1={p1}
-              p2={p2}
-              nextTurn={nextTurn}
-              reservedBox={socket.reservedBox}
-              selectedBox={socket.selectedBox}
-              socketActions={socketActions}
-            />
-          ))}
+          {this.Boxlist()}
         </div>
       </div>
     )

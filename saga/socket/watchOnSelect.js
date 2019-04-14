@@ -59,14 +59,18 @@ function subscribe() {
     }
 
     const broadCastReserve = async ({ reservedBox, roomId }) => {
-      const myRoomId = window.sessionStorage.getItem('roomId');
+      try {
+        const myRoomId = window.sessionStorage.getItem('roomId');
 
-      // 他の部屋のブロードキャストは反映しない
-      if (myRoomId !== roomId) {
+        // 他の部屋のブロードキャストは反映しない
+        if (myRoomId !== roomId) {
+          return;
+        }
+  
+        emit(socketActions.reserveUpdate({ reservedBox }));
+      } catch (e) {
         return;
       }
-
-      emit(socketActions.reserveUpdate({ reservedBox }));
     }
 
     const getRoomsReserve = async (rooms) => {
