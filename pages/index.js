@@ -50,6 +50,7 @@ class App extends Component {
 
     socketActions.watchOnRooms();
     socketActions.watchOnUsers();
+    socketActions.watchOnTurn();
   }
 
   render() {

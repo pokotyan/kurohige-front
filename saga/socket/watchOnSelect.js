@@ -27,10 +27,10 @@ function* initGameStatus({ userId, roomId }) {
 
 function* syncGameStatus() {
   while (true) {
-    const { payload: { boxId, userId, roomId, nextTurn } } = yield take(socketActions.SYNC_GAME_STATUS);
+    const { payload: { boxId, userId, roomId } } = yield take(socketActions.SYNC_GAME_STATUS);
 
-    yield socket.emit('broadCastReserve', { boxId, userId, roomId, nextTurn });
-    yield socket.emit('updateSelected', { boxId, userId, roomId, nextTurn });
+    yield socket.emit('broadCastReserve', { boxId, userId, roomId });
+    yield socket.emit('updateSelected', { boxId, userId, roomId });
   }
 }
 
@@ -73,16 +73,11 @@ function subscribe() {
       emit(authActions.update({ rooms }));
     }
 
-    const updateNextTurnHandler = async (nextTurn) => {
-      emit(systemActions.updateNextTurn(nextTurn));      
-    }
-
     socket.on('initReserve:receive', initReserveHandler);
     socket.on('initSelected:receive', initSelectedHandler);
     socket.on('updateSelected:receive', updateSelectedHandler);
     socket.on('broadCastReserve:receive', broadCastReserveHandler);
     socket.on('getRooms:receive', getRoomsReserveHandler);
-    socket.on('update:nextTurn', updateNextTurnHandler);
 
     const unsubscribe = () => {
       socket.off('initReserve:receive', initReserveHandler);

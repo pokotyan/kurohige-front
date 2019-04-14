@@ -13,11 +13,15 @@ export default class Box extends Component {
     } = this.props;
     const nextTurn = p1 ? 'p2' : 'p1';
 
-    socketActions.syncGameStatus({
+    socketActions.syncGameStatus({ // @todo syncSelectStatus
       boxId: id,
       userId,
       roomId,
+    });
+
+    socketActions.syncTurn({
       nextTurn,
+      roomId,
     });
   }
 

@@ -38,6 +38,14 @@ export const SYNC_USER_ROOM_RELATION = Symbol(
   'SYNC_USER_ROOM_RELATION'
 );
 
+export const WATCH_ON_TURN = Symbol(
+  'WATCH_ON_TURN'
+);
+
+export const SYNC_TURN = Symbol(
+  'SYNC_TURN'
+);
+
 export const watchOnRooms = payload => ({
   type: WATCH_ON_ROOMS,
   payload
@@ -85,5 +93,15 @@ export const watchOnUsers = payload => ({
 
 export const syncUserRoomRelation = payload => ({
   type: SYNC_USER_ROOM_RELATION,
+  payload
+});
+
+export const watchOnTurn = payload => ({
+  type: WATCH_ON_TURN,
+  payload
+});
+
+export const syncTurn = payload => ({
+  type: SYNC_TURN,
   payload
 })

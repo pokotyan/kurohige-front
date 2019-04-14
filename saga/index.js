@@ -3,6 +3,7 @@ import system from './system';
 import watchOnSelect from './socket/watchOnSelect';
 import watchOnRooms from './socket/watchOnRooms';
 import watchOnUsers from './socket/watchOnUsers';
+import watchOnTurn from './socket/watchOnTurn';
 import auth from './auth';
 
 export default function* rootSaga() {
@@ -11,6 +12,7 @@ export default function* rootSaga() {
     fork(watchOnSelect),
     fork(watchOnRooms),
     fork(watchOnUsers),
+    fork(watchOnTurn),
     fork(auth),
   ]);
 }
