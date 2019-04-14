@@ -11,12 +11,13 @@ export default class Box extends Component {
       roomId,
       p1,
     } = this.props;
+    const nextTurn = p1 ? 'p2' : 'p1';
 
     socketActions.syncReserve({
       boxId: id,
       userId,
       roomId,
-      nextTurn: p1 ? 'p2' : 'p1',
+      nextTurn,
     });
   }
 

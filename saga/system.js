@@ -59,7 +59,7 @@ function* selectRoom() {
 }
 
 function* setPlayer1() {
-  const userId = window.sessionStorage.getItem('session');
+  const userId = window.sessionStorage.getItem('userId');
 
   window.sessionStorage.setItem('p1', userId);
 
@@ -69,7 +69,7 @@ function* setPlayer1() {
 }
 
 function* setPlayer2(roomId) {
-  const userId = window.sessionStorage.getItem('session');
+  const userId = window.sessionStorage.getItem('userId');
 
   window.sessionStorage.setItem('p2', userId);
 
@@ -87,9 +87,22 @@ function* setPlayer2(roomId) {
   }));
 }
 
+function* updateNextTurn() {
+  for (;;) {
+    const {
+      payload: nextTurn
+    } = yield take(systemActions.UPDATE_NEXT_TURN);
+
+    window.sessionStorage.setItem('nextTurn', nextTurn);
+
+    yield put(systemActions.setNextTurn(nextTurn));
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     fork(createRoom),
     fork(selectRoom),
+    fork(updateNextTurn),
   ]);
 }

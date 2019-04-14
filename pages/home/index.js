@@ -13,10 +13,11 @@ class Home extends Component {
   componentDidMount() {
     const { router, auth, socketActions, authActions, systemActions } = this.props;
 
-    const userId = window.sessionStorage.getItem('session');
+    const userId = window.sessionStorage.getItem('userId');
     const roomId = window.sessionStorage.getItem('roomId');
     const p1UserId = window.sessionStorage.getItem('p1');
     const p2UserId = window.sessionStorage.getItem('p2');
+    const nextTurn = window.sessionStorage.getItem('nextTurn');
 
     socketActions.watchOnGame({
       userId,
@@ -33,6 +34,8 @@ class Home extends Component {
       p1: !!p1UserId,
       p2: !!p2UserId,
     });
+
+    systemActions.setNextTurn(nextTurn);
   }
 
   render() {

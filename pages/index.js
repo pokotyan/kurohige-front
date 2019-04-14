@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   createSession = () => {
-    let uuid = window.sessionStorage.getItem('session');
+    let uuid = window.sessionStorage.getItem('userId');
 
     if (uuid) {
       return uuid;
@@ -35,7 +35,7 @@ class App extends Component {
 
     uuid = uuidv1();
 
-    window.sessionStorage.setItem('session', uuid);
+    window.sessionStorage.setItem('userId', uuid);
 
     return uuid;
   }
