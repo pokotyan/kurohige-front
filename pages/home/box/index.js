@@ -12,6 +12,12 @@ export default class Box extends Component {
       roomId,
       p1,
     } = this.props;
+    const kurohige = window.sessionStorage.getItem('kurohige');
+    if (id === kurohige) {
+      alert('負け')
+      return
+    }
+
     const nextTurn = p1 ? 'p2' : 'p1';
 
     socketActions.syncSelectStatus({
@@ -43,6 +49,21 @@ export default class Box extends Component {
     return _.uniq(enemyBox);
   }
 
+  getSelectedAllBox = () => {
+    const {
+      reservedBox,
+      userId,
+      roomId,
+    } = this.props;
+    const selectedAllBox = [];
+
+    Object.keys(reservedBox).forEach(id => {
+      selectedAllBox.push(...reservedBox[id])
+    });
+
+    return _.uniq(selectedAllBox);
+  }
+
   getCss = (enemyBox) => {
     const {
       selectedBox,
@@ -69,14 +90,9 @@ export default class Box extends Component {
     return nextTurn === me;
   }
 
-  checkGame = (enemyBox) => {
-    const {
-      selectedBox,
-    } = this.props;
-  }
-
   render() {
     const {
+      id,
       reservedBox,
       selectedBox,
       userId,
@@ -88,10 +104,11 @@ export default class Box extends Component {
     const enemyBox = this.getEnemyBox();
     const parentClassName = this.getCss(enemyBox);
     const isMyTurn = this.isMyTurn();
-    this.checkGame(enemyBox);
+    const selectedAllBox = this.getSelectedAllBox();
+    const isAlreadySelected = selectedAllBox.includes(id);
 
     return (
-      isMyTurn ? (
+      (isMyTurn && !isAlreadySelected) ? (
         <div
           className={parentClassName}
           onClick={this.syncSelectStatus}

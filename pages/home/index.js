@@ -60,8 +60,8 @@ class Home extends Component {
     } = this.props;
     const boxList = [];
 
-    for (let y = 1; y < 15; y++) {  
-      for (let x = 1; x < 15; x++) {
+    for (let y = 1; y < 6; y++) {  
+      for (let x = 1; x < 6; x++) {
         boxList.push(
           <Box
             id={`${y}:${x}`}
