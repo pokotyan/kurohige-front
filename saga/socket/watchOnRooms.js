@@ -5,6 +5,8 @@ import * as authActions from '../../actions/auth';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
+// const socket = io('http://54.178.145.131');
+
 
 function* watchOnRooms() {
   while (true) {

@@ -6,6 +6,7 @@ import * as systemActions from '../../actions/system';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
+// const socket = io('http://54.178.145.131');
 
 function* watchOnTurn() {
   while (true) {
@@ -22,17 +23,9 @@ function* watchOnTurn() {
 function* syncTurn() {
   while (true) {
     const { payload: { nextTurn, roomId } } = yield take(socketActions.SYNC_TURN);
-    let kurohige = window.sessionStorage.getItem('kurohige');
 
-    if (!kurohige) {
-      const width = Math.floor(Math.random() * 5) + 1;
-      const height = Math.floor(Math.random() * 5) + 1;
-
-      kurohige = `${height}:${width}`;
-    }
-
-    yield socket.emit('broadCastNextTurn', { nextTurn, roomId, kurohige });
-    yield socket.emit('updateNextTurn', { nextTurn, roomId, kurohige });
+    yield socket.emit('broadCastNextTurn', { nextTurn, roomId });
+    yield socket.emit('updateNextTurn', { nextTurn, roomId });
   }
 }
 
@@ -48,7 +41,7 @@ function* writeTurn() {
 
 function subscribe() {
   return eventChannel(emit => {
-    const updateNextTurn = async ({ nextTurn, roomId, kurohige }) => {
+    const updateNextTurn = async ({ nextTurn, roomId }) => {
       try {
         const myRoomId = window.sessionStorage.getItem('roomId');
 
@@ -57,7 +50,6 @@ function subscribe() {
           return;
         }
   
-        window.sessionStorage.setItem('kurohige', kurohige);
         window.sessionStorage.setItem('nextTurn', nextTurn);
         emit(systemActions.setNextTurn(nextTurn));
       } catch (e) {

@@ -6,6 +6,7 @@ import * as systemActions from '../../actions/system';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
+// const socket = io('http://54.178.145.131');
 
 function* watchOnSelect() {
   while (true) {

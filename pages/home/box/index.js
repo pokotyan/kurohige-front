@@ -3,6 +3,64 @@ import _ from "lodash";
 import cx from "classnames";
 import style from "./style.css";
 
+const judgeGame = (currentSelectBox) => {
+  // boxIdは `${y}:${x}`
+
+  currentSelectBox.forEach(boxId => {
+    let [y, x] = boxId.split(':');
+    let curY = parseInt(y, 10)
+    let curX = parseInt(x, 10)
+
+    const countY = currentSelectBox.filter(boxId => {
+      return boxId === `${curY}:${curX}` ||
+      boxId === `${curY + 1}:${curX}` ||
+      boxId === `${curY + 2}:${curX}` ||
+      boxId === `${curY + 3}:${curX}` ||
+      boxId === `${curY + 4}:${curX}`
+    }).length;
+
+    const countX = currentSelectBox.filter(boxId => {
+      return boxId === `${curY}:${curX}` ||
+      boxId === `${curY}:${curX + 1}` ||
+      boxId === `${curY}:${curX + 2}` ||
+      boxId === `${curY}:${curX + 3}` ||
+      boxId === `${curY}:${curX + 4}`
+    }).length;
+
+    const countHidariNaname = currentSelectBox.filter(boxId => {
+      return boxId === `${curY}:${curX}` ||
+      boxId === `${curY + 1}:${curX + 1}` ||
+      boxId === `${curY + 2}:${curX + 2}` ||
+      boxId === `${curY + 3}:${curX + 3}` ||
+      boxId === `${curY + 4}:${curX + 4}`
+    }).length;
+
+    const countMigiNaname = currentSelectBox.filter(boxId => {
+      return boxId === `${curY}:${curX}` ||
+      boxId === `${curY + 1}:${curX - 1}` ||
+      boxId === `${curY + 2}:${curX - 2}` ||
+      boxId === `${curY + 3}:${curX - 3}` ||
+      boxId === `${curY + 4}:${curX - 4}`
+    }).length;
+
+    if (countY === 5) {
+      alert('縦に並んだ')
+    }
+
+    if (countX === 5) {
+      alert('横に並んだ')
+    }
+
+    if (countHidariNaname === 5) {
+      alert('左斜めに並んだ')
+    }
+
+    if (countMigiNaname === 5) {
+      alert('右斜めに並んだ')
+    }
+  });
+}
+
 export default class Box extends Component {
   syncSelectStatus = () => {
     const {
@@ -11,13 +69,8 @@ export default class Box extends Component {
       userId,
       roomId,
       p1,
+      selectedBox
     } = this.props;
-    const kurohige = window.sessionStorage.getItem('kurohige');
-    if (id === kurohige) {
-      alert('負け')
-      return
-    }
-
     const nextTurn = p1 ? 'p2' : 'p1';
 
     socketActions.syncSelectStatus({
@@ -30,6 +83,8 @@ export default class Box extends Component {
       nextTurn,
       roomId,
     });
+
+    judgeGame([...selectedBox, id]);
   }
 
   getEnemyBox = () => {
