@@ -87,9 +87,14 @@
 }
 
 @media screen and (max-width: 480px) {
-  .base, .isEnemyBoxRed, .isEnemyBoxBlue, .isMyBoxRed, .isMyBoxBlue {
+  .base, .isEnemyBoxBlack, .isEnemyBoxWhite, .isMyBoxBlack, .isMyBoxWhite {
     width: 25px;
     height: 25px;  
+  }
+
+  .isEnemyBoxBlack::before, .isEnemyBoxWhite::before, .isMyBoxBlack::before, .isMyBoxWhite::before {
+    top: 0;
+    left: 0;  
   }
 }
 
