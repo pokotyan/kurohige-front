@@ -60,7 +60,7 @@ class Home extends Component {
     const me = p1 ? 'p1' : 'p2';
     const isMyTurn = nextTurn === me;
     const isWaitingPlayer = userIds.length < 2;
-    const myColor = isMyTurn && p1 ? '赤' : '青';
+    const myColor = isMyTurn && p1 ? '黒' : '白';
 
     return (
       <div className={css.container}>

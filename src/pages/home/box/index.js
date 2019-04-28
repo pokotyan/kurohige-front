@@ -44,10 +44,10 @@ export default class Box extends Component {
     const { isEnemyBox, isMyBox } = socket.getBoxType({ enemyBox, boxId: id });
     const boxCss = cx({
       [style.base]: !isEnemyBox && !isMyBox,
-      [style.isEnemyBoxRed]: isEnemyBox && p2,
-      [style.isEnemyBoxBlue]: isEnemyBox && p1,
-      [style.isMyBoxRed]: isMyBox && p1,
-      [style.isMyBoxBlue]: isMyBox && p2,
+      [style.isEnemyBoxBlack]: isEnemyBox && p2,
+      [style.isEnemyBoxWhite]: isEnemyBox && p1,
+      [style.isMyBoxBlack]: isMyBox && p1,
+      [style.isMyBoxWhite]: isMyBox && p2,
     });
 
     const isMyTurn = this.isMyTurn();
