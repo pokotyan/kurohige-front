@@ -22,7 +22,7 @@ class Home extends Component {
     const {
       socket,
       auth: { userId, roomId },
-      system: { p1, nextTurn },
+      system: { p1, p2, nextTurn },
       socketActions,
       gameActions,
     } = this.props;
@@ -37,6 +37,7 @@ class Home extends Component {
             userId={userId}
             roomId={roomId}
             p1={p1}
+            p2={p2}
             nextTurn={nextTurn}
             socket={socket}
             socketActions={socketActions}
@@ -59,6 +60,7 @@ class Home extends Component {
     const me = p1 ? 'p1' : 'p2';
     const isMyTurn = nextTurn === me;
     const isWaitingPlayer = userIds.length < 2;
+    const myColor = isMyTurn && p1 ? '赤' : '青';
 
     return (
       <div className={css.container}>
@@ -68,7 +70,7 @@ class Home extends Component {
           {isWaitingPlayer
             ? ' ユーザーを待っています'
             : isMyTurn
-            ? ' あなたのターン'
+            ? ` あなた(${myColor})のターン`
             : ' 相手のターン'}
         </div>
         <div className={css.boxContainer}>{this.Boxlist()}</div>

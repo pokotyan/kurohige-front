@@ -6,7 +6,7 @@
   border: solid 1px black;
 }
 
-.isEnemyBox {
+.isEnemyBoxRed {
   position: relative;
   box-sizing: border-box;
   width: 50px;
@@ -14,7 +14,7 @@
   border: solid 1px black;
 }
 
-.isEnemyBox::before {
+.isEnemyBoxRed::before {
   content: '';
   position: absolute;
   top: 0;
@@ -24,7 +24,7 @@
   background-color: red;
 }
 
-.isMyBox {
+.isEnemyBoxBlue {
   position: relative;
   box-sizing: border-box;
   width: 50px;
@@ -32,14 +32,7 @@
   border: solid 1px black;
 }
 
-@media screen and (max-width: 480px) {
-  .base, .isEnemyBox, .isMyBox {
-    width: 25px;
-    height: 25px;  
-  }
-}
-
-.isMyBox::before {
+.isEnemyBoxBlue::before {
   content: '';
   position: absolute;
   top: 0;
@@ -48,3 +41,48 @@
   height: 100%;
   background-color: blue;
 }
+
+.isMyBoxRed {
+  position: relative;
+  box-sizing: border-box;
+  width: 50px;
+  height: 50px;
+  border: solid 1px black;
+}
+
+.isMyBoxRed::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+}
+
+.isMyBoxBlue {
+  position: relative;
+  box-sizing: border-box;
+  width: 50px;
+  height: 50px;
+  border: solid 1px black;
+}
+
+.isMyBoxBlue::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: blue;
+}
+
+@media screen and (max-width: 480px) {
+  .base, .isEnemyBoxRed, .isEnemyBoxBlue, .isMyBoxRed, .isMyBoxBlue {
+    width: 25px;
+    height: 25px;  
+  }
+}
+
+
