@@ -1,5 +1,6 @@
-import { take, all, fork } from 'redux-saga/effects';
+import { take, all, fork, put } from 'redux-saga/effects';
 import * as gameActions from '../actions/game';
+import * as uiActions from '../actions/ui';
 
 function* judgeGame() {
   for (;;) {
@@ -8,7 +9,7 @@ function* judgeGame() {
     } = yield take(gameActions.JUDGE_GAME);
 
     // boxIdは `${y}:${x}`
-    currentSelectBox.forEach(boxId => {
+    const isWin = currentSelectBox.some(boxId => {
       let [y, x] = boxId.split(':');
       let curY = parseInt(y, 10);
       let curX = parseInt(x, 10);
@@ -54,21 +55,31 @@ function* judgeGame() {
       }).length;
 
       if (countY === 5) {
-        window.alert('縦に並んだ');
+        return true;
       }
 
       if (countX === 5) {
-        window.alert('横に並んだ');
+        return true;
       }
 
       if (countHidariNaname === 5) {
-        window.alert('左斜めに並んだ');
+        return true;
       }
 
       if (countMigiNaname === 5) {
-        window.alert('右斜めに並んだ');
+        return true;
       }
+
+      return false;
     });
+
+    if (isWin) {
+      yield put(
+        uiActions.endGame({
+          message: 'WIN',
+        })
+      );
+    }
   }
 }
 

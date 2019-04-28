@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'next/router';
 import Box from './box';
+import EndGame from './endGame';
 import * as socketActions from '../../actions/socket';
 import * as authActions from '../../actions/auth';
 import * as systemActions from '../../actions/system';
@@ -27,8 +28,8 @@ class Home extends Component {
     } = this.props;
     const boxList = [];
 
-    for (let y = 1; y < 6; y++) {
-      for (let x = 1; x < 6; x++) {
+    for (let y = 1; y < 14; y++) {
+      for (let x = 1; x < 14; x++) {
         boxList.push(
           <Box
             key={`${y}:${x}`}
@@ -52,6 +53,7 @@ class Home extends Component {
     const {
       auth: { roomId, userIds },
       system: { p1, nextTurn },
+      ui,
     } = this.props;
 
     const me = p1 ? 'p1' : 'p2';
@@ -59,14 +61,17 @@ class Home extends Component {
     const isWaitingPlayer = userIds.length < 2;
 
     return (
-      <div>
-        roomId: {roomId}
-        {isWaitingPlayer
-          ? ' ユーザーを待っています'
-          : isMyTurn
-          ? ' あなたのターン'
-          : ' 相手のターン'}
-        <div className={css.container}>{this.Boxlist()}</div>
+      <div className={css.container}>
+        <EndGame isEndGame={ui.isEndGame} message={ui.message} />
+        <div className={css.header}>
+          roomId: {roomId}
+          {isWaitingPlayer
+            ? ' ユーザーを待っています'
+            : isMyTurn
+            ? ' あなたのターン'
+            : ' 相手のターン'}
+        </div>
+        <div className={css.boxContainer}>{this.Boxlist()}</div>
       </div>
     );
   }
@@ -76,6 +81,7 @@ const mapStateToProps = state => ({
   auth: state.auth,
   socket: state.socket,
   system: state.system,
+  ui: state.ui,
 });
 
 const mapDispatchToProps = dispatch => ({

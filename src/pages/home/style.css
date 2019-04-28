@@ -1,7 +1,21 @@
 .container {
-  width: 100vw;
-  height: 100vh;
+  box-sizing: border-box;
+}
+
+.header {
+  padding: 10px;
+}
+
+.boxContainer {
+  width: 650px;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+  margin: auto;
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    width: 325px;
+  }
 }
