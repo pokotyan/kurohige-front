@@ -12,6 +12,7 @@
   flex-wrap: wrap;
   align-content: flex-start;
   margin: auto;
+  background-image: url("/static/grain.jpg")
 }
 
 @media screen and (max-width: 480px) {
