@@ -19,7 +19,7 @@ class Home extends Component {
 
   Boxlist = () => {
     const {
-      socket: { reservedBox, selectedBox },
+      socket,
       auth: { userId, roomId },
       system: { p1, nextTurn },
       socketActions,
@@ -37,8 +37,7 @@ class Home extends Component {
             roomId={roomId}
             p1={p1}
             nextTurn={nextTurn}
-            reservedBox={reservedBox}
-            selectedBox={selectedBox}
+            socket={socket}
             socketActions={socketActions}
             gameActions={gameActions}
           />
@@ -57,12 +56,12 @@ class Home extends Component {
 
     const me = p1 ? 'p1' : 'p2';
     const isMyTurn = nextTurn === me;
-    const waitingPlayer = userIds.length < 2;
+    const isWaitingPlayer = userIds.length < 2;
 
     return (
       <div>
         roomId: {roomId}
-        {waitingPlayer
+        {isWaitingPlayer
           ? ' ユーザーを待っています'
           : isMyTurn
           ? ' あなたのターン'
