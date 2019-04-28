@@ -27,6 +27,16 @@ class Socket {
 
     return _.uniq(selectedAllBox);
   }
+
+  getBoxType({ enemyBox, boxId }) {
+    const isEnemyBox = enemyBox.includes(boxId);
+    const isMyBox = this.selectedBox.includes(boxId);
+
+    return {
+      isEnemyBox,
+      isMyBox,
+    };
+  }
 }
 
 export default socket => plainToClass(Socket, socket);

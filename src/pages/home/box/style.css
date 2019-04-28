@@ -6,7 +6,7 @@
   border: solid 2px black;
 }
 
-.isReserved {
+.isEnemyBox {
   position: relative;
   box-sizing: border-box;
   width: 20%;
@@ -14,7 +14,7 @@
   border: solid 2px black;
 }
 
-.isReserved::before {
+.isEnemyBox::before {
   content: '';
   position: absolute;
   top: 0;
@@ -25,7 +25,7 @@
   z-index: 1;
 }
 
-.isSelected {
+.isMyBox {
   position: relative;
   box-sizing: border-box;
   width: 20%;
@@ -33,7 +33,7 @@
   border: solid 2px black;
 }
 
-.isSelected::before {
+.isMyBox::before {
   content: '';
   position: absolute;
   top: 0;

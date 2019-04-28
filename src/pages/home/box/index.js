@@ -31,21 +31,6 @@ export default class Box extends Component {
     });
   };
 
-  getCss = enemyBox => {
-    const {
-      socket: { selectedBox },
-    } = this.props;
-
-    const isReserved = enemyBox.includes(this.props.id);
-    const isSelected = selectedBox.includes(this.props.id);
-
-    return cx({
-      [style.base]: !isReserved && !isSelected,
-      [style.isReserved]: isReserved,
-      [style.isSelected]: isSelected,
-    });
-  };
-
   isMyTurn = () => {
     const { p1, nextTurn } = this.props;
 
@@ -56,14 +41,20 @@ export default class Box extends Component {
   render() {
     const { id, socket, userId, roomId } = this.props;
     const enemyBox = socket.getEnemyBox({ userId, roomId });
-    const parentClassName = this.getCss(enemyBox);
+    const { isEnemyBox, isMyBox } = socket.getBoxType({ enemyBox, boxId: id });
+    const boxCss = cx({
+      [style.base]: !isEnemyBox && !isMyBox,
+      [style.isEnemyBox]: isEnemyBox,
+      [style.isMyBox]: isMyBox,
+    });
+
     const isMyTurn = this.isMyTurn();
     const isAlreadySelected = socket.selectedAllBox.includes(id);
 
     return isMyTurn && !isAlreadySelected ? (
-      <div className={parentClassName} onClick={this.syncSelectStatus} />
+      <div className={boxCss} onClick={this.syncSelectStatus} />
     ) : (
-      <div className={parentClassName} />
+      <div className={boxCss} />
     );
   }
 }
