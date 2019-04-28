@@ -79,6 +79,15 @@ function* judgeGame() {
           message: 'WIN',
         })
       );
+
+      // @todo redisの有効期限を設定
+
+      // window.sessionStorage.removeItem('userId');
+      window.sessionStorage.removeItem('roomId');
+      window.sessionStorage.removeItem('userIds');
+      window.sessionStorage.removeItem('p1');
+      window.sessionStorage.removeItem('p2');
+      window.sessionStorage.removeItem('nextTurn');
     }
   }
 }

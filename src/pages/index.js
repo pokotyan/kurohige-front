@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import uuidv1 from 'uuid/v1';
 import * as systemActions from '../actions/system';
 import * as authActions from '../actions/auth';
+import css from './style.css';
 
 class App extends Component {
   createRoom = () => {
@@ -45,16 +46,29 @@ class App extends Component {
 
   render() {
     const { auth } = this.props;
+    const isExistsRooms = auth.rooms.length;
 
     return (
       <div>
-        <div onClick={this.createRoom}>ルームを作成してゲーム開始</div>
-        <div>ルームに参加してゲーム開始</div>
-        {auth.rooms.map(roomId => (
-          <div key={roomId} onClick={this.selectRoom(roomId)}>
-            {roomId}
+        <div className={css.center}>
+          <img src="/static/title.png" />
+        </div>
+        <div className={css.center} onClick={this.createRoom}>
+          ルームを作成してゲーム開始
+        </div>
+        {isExistsRooms ? (
+          <div>
+            {auth.rooms.map(roomId => (
+              <div
+                key={roomId}
+                className={css.center}
+                onClick={this.selectRoom(roomId)}
+              >
+                {`ルームid: ${roomId} に参加してゲーム開始`}
+              </div>
+            ))}
           </div>
-        ))}
+        ) : null}
       </div>
     );
   }
