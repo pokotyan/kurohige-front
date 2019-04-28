@@ -104,6 +104,43 @@ function* setPlayer(player) {
   );
 }
 
+function* reloadData() {
+  for (;;) {
+    yield take(systemActions.RELOAD_DATA);
+
+    const userId = window.sessionStorage.getItem('userId');
+    const roomId = window.sessionStorage.getItem('roomId');
+    const userIds = window.sessionStorage.getItem('userIds');
+    const p1UserId = window.sessionStorage.getItem('p1');
+    const p2UserId = window.sessionStorage.getItem('p2');
+    const nextTurn = window.sessionStorage.getItem('nextTurn');
+
+    yield put(
+      socketActions.watchOnSelect({
+        userId,
+        roomId,
+      })
+    );
+
+    yield put(
+      authActions.update({
+        userId,
+        roomId,
+        userIds: JSON.parse(userIds),
+      })
+    );
+
+    yield put(
+      systemActions.setPlayer({
+        p1: !!p1UserId,
+        p2: !!p2UserId,
+      })
+    );
+
+    yield put(systemActions.setNextTurn(nextTurn));
+  }
+}
+
 export default function* rootSaga() {
-  yield all([fork(createRoom), fork(selectRoom)]);
+  yield all([fork(createRoom), fork(selectRoom), fork(reloadData)]);
 }

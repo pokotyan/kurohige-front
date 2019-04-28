@@ -6,44 +6,24 @@ import Box from './box';
 import * as socketActions from '../../actions/socket';
 import * as authActions from '../../actions/auth';
 import * as systemActions from '../../actions/system';
+import * as gameActions from '../../actions/game';
 import css from './style.css';
 
 class Home extends Component {
   componentDidMount() {
-    const { socketActions, authActions, systemActions } = this.props;
-    const userId = window.sessionStorage.getItem('userId');
-    const roomId = window.sessionStorage.getItem('roomId');
-    const userIds = window.sessionStorage.getItem('userIds');
-    const p1UserId = window.sessionStorage.getItem('p1');
-    const p2UserId = window.sessionStorage.getItem('p2');
-    const nextTurn = window.sessionStorage.getItem('nextTurn');
-
-    socketActions.watchOnSelect({
-      userId,
-      roomId,
-    });
+    const { systemActions } = this.props;
 
     // リロード対策
-    authActions.update({
-      userId,
-      roomId,
-      userIds: JSON.parse(userIds),
-    });
-
-    systemActions.setPlayer({
-      p1: !!p1UserId,
-      p2: !!p2UserId,
-    });
-
-    systemActions.setNextTurn(nextTurn);
+    systemActions.reloadData();
   }
 
   Boxlist = () => {
     const {
       socket: { reservedBox, selectedBox },
       auth: { userId, roomId },
-      system: { p1, p2, nextTurn },
+      system: { p1, nextTurn },
       socketActions,
+      gameActions,
     } = this.props;
     const boxList = [];
 
@@ -51,16 +31,16 @@ class Home extends Component {
       for (let x = 1; x < 6; x++) {
         boxList.push(
           <Box
-            id={`${y}:${x}`}
             key={`${y}:${x}`}
+            id={`${y}:${x}`}
             userId={userId}
             roomId={roomId}
             p1={p1}
-            p2={p2}
             nextTurn={nextTurn}
             reservedBox={reservedBox}
             selectedBox={selectedBox}
             socketActions={socketActions}
+            gameActions={gameActions}
           />
         );
       }
@@ -103,6 +83,7 @@ const mapDispatchToProps = dispatch => ({
   socketActions: bindActionCreators(socketActions, dispatch),
   authActions: bindActionCreators(authActions, dispatch),
   systemActions: bindActionCreators(systemActions, dispatch),
+  gameActions: bindActionCreators(gameActions, dispatch),
 });
 
 export default withRouter(
