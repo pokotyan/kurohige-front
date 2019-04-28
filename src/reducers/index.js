@@ -6,7 +6,7 @@ import system from './system';
 const reducer = combineReducers({
   socket,
   auth,
-  system
+  system,
 });
 
 export default reducer;

@@ -1,19 +1,16 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'next/router';
-import _ from 'lodash';
-import * as socketActions from "../../actions/socket";
-import * as authActions from "../../actions/auth";
-import * as systemActions from "../../actions/system";
 import Box from './box';
-import css from "./style.css";
+import * as socketActions from '../../actions/socket';
+import * as authActions from '../../actions/auth';
+import * as systemActions from '../../actions/system';
+import css from './style.css';
 
 class Home extends Component {
   componentDidMount() {
-    const { router, auth, socketActions, authActions, systemActions } = this.props;
-
-    // @todo この情報sessionStorageに入れるからstoreに入れなくていい気がする
+    const { socketActions, authActions, systemActions } = this.props;
     const userId = window.sessionStorage.getItem('userId');
     const roomId = window.sessionStorage.getItem('roomId');
     const userIds = window.sessionStorage.getItem('userIds');
@@ -23,14 +20,14 @@ class Home extends Component {
 
     socketActions.watchOnSelect({
       userId,
-      roomId
+      roomId,
     });
 
     // リロード対策
     authActions.update({
       userId,
       roomId,
-      userIds: JSON.parse(userIds)
+      userIds: JSON.parse(userIds),
     });
 
     systemActions.setPlayer({
@@ -43,24 +40,14 @@ class Home extends Component {
 
   Boxlist = () => {
     const {
-      socket: {
-        reservedBox,
-        selectedBox,
-      },
-      auth: {
-        userId,
-        roomId,
-      },
-      system: {
-        p1,
-        p2,
-        nextTurn
-      },
-      socketActions
+      socket: { reservedBox, selectedBox },
+      auth: { userId, roomId },
+      system: { p1, p2, nextTurn },
+      socketActions,
     } = this.props;
     const boxList = [];
 
-    for (let y = 1; y < 6; y++) {  
+    for (let y = 1; y < 6; y++) {
       for (let x = 1; x < 6; x++) {
         boxList.push(
           <Box
@@ -80,22 +67,12 @@ class Home extends Component {
     }
 
     return boxList;
-  }
+  };
 
   render() {
     const {
-      socket,
-      auth: {
-        userId,
-        roomId,
-        userIds
-      },
-      system: {
-        p1,
-        p2,
-        nextTurn
-      },
-      socketActions
+      auth: { roomId, userIds },
+      system: { p1, nextTurn },
     } = this.props;
 
     const me = p1 ? 'p1' : 'p2';
@@ -105,14 +82,14 @@ class Home extends Component {
     return (
       <div>
         roomId: {roomId}
-        {waitingPlayer ? ' ユーザーを待っています' : (
-          isMyTurn ? ' あなたのターン' : ' 敵のターン'
-        )}
-        <div className={css.container}>
-          {this.Boxlist()}
-        </div>
+        {waitingPlayer
+          ? ' ユーザーを待っています'
+          : isMyTurn
+          ? ' あなたのターン'
+          : ' 相手のターン'}
+        <div className={css.container}>{this.Boxlist()}</div>
       </div>
-    )
+    );
   }
 }
 
@@ -126,6 +103,11 @@ const mapDispatchToProps = dispatch => ({
   socketActions: bindActionCreators(socketActions, dispatch),
   authActions: bindActionCreators(authActions, dispatch),
   systemActions: bindActionCreators(systemActions, dispatch),
-})
+});
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Home)
+);

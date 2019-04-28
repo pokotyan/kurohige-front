@@ -1,7 +1,6 @@
-import { put, take, all, fork, call, select } from 'redux-saga/effects';
+import { put, take, all, fork, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import * as socketActions from '../../actions/socket';
-import * as authActions from '../../actions/auth';
 import * as systemActions from '../../actions/system';
 import io from 'socket.io-client';
 
@@ -15,14 +14,16 @@ function* watchOnTurn() {
       yield fork(syncTurn);
       yield fork(writeTurn);
     } catch (err) {
-      console.error('socket error:', err)
+      throw new Error(err);
     }
   }
 }
 
 function* syncTurn() {
   while (true) {
-    const { payload: { nextTurn, roomId } } = yield take(socketActions.SYNC_TURN);
+    const {
+      payload: { nextTurn, roomId },
+    } = yield take(socketActions.SYNC_TURN);
 
     yield socket.emit('broadCastNextTurn', { nextTurn, roomId });
     yield socket.emit('updateNextTurn', { nextTurn, roomId });
@@ -49,26 +50,24 @@ function subscribe() {
         if (myRoomId !== roomId) {
           return;
         }
-  
+
         window.sessionStorage.setItem('nextTurn', nextTurn);
         emit(systemActions.setNextTurn(nextTurn));
       } catch (e) {
         return;
       }
-    }
+    };
 
     socket.on('updateNextTurn:receive', updateNextTurn);
-    
+
     const unsubscribe = () => {
       socket.off('updateNextTurn:receive', updateNextTurn);
-    }
+    };
 
     return unsubscribe;
   });
 }
 
 export default function* rootSaga() {
-  yield all([
-    fork(watchOnTurn),
-  ]);
+  yield all([fork(watchOnTurn)]);
 }

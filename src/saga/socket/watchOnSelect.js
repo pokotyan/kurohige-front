@@ -1,8 +1,7 @@
-import { put, take, all, fork, call, select } from 'redux-saga/effects';
+import { put, take, all, fork, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import * as socketActions from '../../actions/socket';
 import * as authActions from '../../actions/auth';
-import * as systemActions from '../../actions/system';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
@@ -11,12 +10,14 @@ const socket = io('http://localhost:8999');
 function* watchOnSelect() {
   while (true) {
     try {
-      const { payload: { userId, roomId } } = yield take(socketActions.WATCH_ON_SELECT);
+      const {
+        payload: { userId, roomId },
+      } = yield take(socketActions.WATCH_ON_SELECT);
       yield fork(initSelectStatus, { userId, roomId });
       yield fork(syncSelectStatus);
       yield fork(writeSelectStatus);
     } catch (err) {
-      console.error('socket error:', err)
+      throw new Error(err);
     }
   }
 }
@@ -28,7 +29,9 @@ function* initSelectStatus({ userId, roomId }) {
 
 function* syncSelectStatus() {
   while (true) {
-    const { payload: { boxId, userId, roomId } } = yield take(socketActions.SYNC_SELECT_STATUS);
+    const {
+      payload: { boxId, userId, roomId },
+    } = yield take(socketActions.SYNC_SELECT_STATUS);
 
     yield socket.emit('broadCastReserve', { boxId, userId, roomId });
     yield socket.emit('updateSelected', { boxId, userId, roomId });
@@ -47,17 +50,17 @@ function* writeSelectStatus() {
 
 function subscribe() {
   return eventChannel(emit => {
-    const initReserve = async (reservedBox) => {
+    const initReserve = async reservedBox => {
       emit(socketActions.reserveUpdate({ reservedBox }));
-    }
+    };
 
-    const initSelected = async (selectedBox) => {
+    const initSelected = async selectedBox => {
       emit(socketActions.selectedUpdate({ selectedBox }));
-    }
+    };
 
-    const updateSelected = async (selectedBox) => {
+    const updateSelected = async selectedBox => {
       emit(socketActions.selectedUpdate({ selectedBox }));
-    }
+    };
 
     const broadCastReserve = async ({ reservedBox, roomId }) => {
       try {
@@ -67,16 +70,16 @@ function subscribe() {
         if (myRoomId !== roomId) {
           return;
         }
-  
+
         emit(socketActions.reserveUpdate({ reservedBox }));
       } catch (e) {
         return;
       }
-    }
+    };
 
-    const getRoomsReserve = async (rooms) => {
+    const getRoomsReserve = async rooms => {
       emit(authActions.update({ rooms }));
-    }
+    };
 
     socket.on('initReserve:receive', initReserve);
     socket.on('initSelected:receive', initSelected);
@@ -90,14 +93,12 @@ function subscribe() {
       socket.off('updateSelected:receive', updateSelected);
       socket.off('broadCastReserve:receive', broadCastReserve);
       socket.off('getRooms:receive', getRoomsReserve);
-    }
+    };
 
     return unsubscribe;
   });
 }
 
 export default function* rootSaga() {
-  yield all([
-    fork(watchOnSelect),
-  ]);
+  yield all([fork(watchOnSelect)]);
 }

@@ -1,107 +1,83 @@
-export const WATCH_ON_ROOMS = Symbol(
-  'WATCH_ON_ROOMS'
-);
+export const WATCH_ON_ROOMS = Symbol('WATCH_ON_ROOMS');
 
-export const GAME_START = Symbol(
-  'GAME_START'
-);
+export const GAME_START = Symbol('GAME_START');
 
-export const CREATE_ROOM = Symbol(
-  'CREATE_ROOM'
-);
+export const CREATE_ROOM = Symbol('CREATE_ROOM');
 
-export const DELETE_ROOM = Symbol(
-  'DELETE_ROOM'
-);
+export const DELETE_ROOM = Symbol('DELETE_ROOM');
 
-export const SYNC_SELECT_STATUS = Symbol(
-  'SYNC_SELECT_STATUS'
-);
+export const SYNC_SELECT_STATUS = Symbol('SYNC_SELECT_STATUS');
 
-export const WATCH_ON_SELECT = Symbol(
-  'WATCH_ON_SELECT'
-);
+export const WATCH_ON_SELECT = Symbol('WATCH_ON_SELECT');
 
-export const RESERVE_UPDATE = Symbol(
-  'RESERVE_UPDATE'
-);
+export const RESERVE_UPDATE = Symbol('RESERVE_UPDATE');
 
-export const SELECTED_UPDATE = Symbol(
-  'SELECTED_UPDATE'
-);
+export const SELECTED_UPDATE = Symbol('SELECTED_UPDATE');
 
-export const WATCH_ON_USERS = Symbol(
-  'WATCH_ON_USERS'
-);
+export const WATCH_ON_USERS = Symbol('WATCH_ON_USERS');
 
-export const SYNC_USER_ROOM_RELATION = Symbol(
-  'SYNC_USER_ROOM_RELATION'
-);
+export const SYNC_USER_ROOM_RELATION = Symbol('SYNC_USER_ROOM_RELATION');
 
-export const WATCH_ON_TURN = Symbol(
-  'WATCH_ON_TURN'
-);
+export const WATCH_ON_TURN = Symbol('WATCH_ON_TURN');
 
-export const SYNC_TURN = Symbol(
-  'SYNC_TURN'
-);
+export const SYNC_TURN = Symbol('SYNC_TURN');
 
 export const watchOnRooms = payload => ({
   type: WATCH_ON_ROOMS,
-  payload
+  payload,
 });
 
 export const gameStart = payload => ({
   type: GAME_START,
-  payload
+  payload,
 });
 
 export const createRoom = payload => ({
   type: CREATE_ROOM,
-  payload
+  payload,
 });
 
 export const deleteRoom = payload => ({
   type: DELETE_ROOM,
-  payload
+  payload,
 });
 
 export const syncSelectStatus = payload => ({
   type: SYNC_SELECT_STATUS,
-  payload
+  payload,
 });
 
 export const watchOnSelect = payload => ({
   type: WATCH_ON_SELECT,
-  payload
-})
+  payload,
+});
 
 export const reserveUpdate = payload => ({
   type: RESERVE_UPDATE,
-  payload
+  payload,
 });
 
 export const selectedUpdate = payload => ({
   type: SELECTED_UPDATE,
-  payload
+  payload,
 });
 
 export const watchOnUsers = payload => ({
   type: WATCH_ON_USERS,
-  payload
+  payload,
 });
 
 export const syncUserRoomRelation = payload => ({
   type: SYNC_USER_ROOM_RELATION,
-  payload
+  payload,
 });
 
 export const watchOnTurn = payload => ({
   type: WATCH_ON_TURN,
-  payload
+  payload,
 });
 
 export const syncTurn = payload => ({
   type: SYNC_TURN,
-  payload
-})
+  payload,
+});

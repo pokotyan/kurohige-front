@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { withRouter } from 'next/router';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import uuidv1 from 'uuid/v1';
-import * as systemActions from "../actions/system";
-import * as authActions from "../actions/auth";
+import * as systemActions from '../actions/system';
+import * as authActions from '../actions/auth';
 
 class App extends Component {
   createRoom = () => {
@@ -13,17 +13,17 @@ class App extends Component {
     systemActions.createRoom();
 
     router.push('/home');
-  }
+  };
 
-  selectRoom = (roomId) => () => {
-    const { router, authActions, systemActions } = this.props;
+  selectRoom = roomId => () => {
+    const { router, systemActions } = this.props;
 
     systemActions.selectRoom({
-      roomId
+      roomId,
     });
 
     router.push('/home');
-  }
+  };
 
   createSession = () => {
     let uuid = window.sessionStorage.getItem('userId');
@@ -37,38 +37,26 @@ class App extends Component {
     window.sessionStorage.setItem('userId', uuid);
 
     return uuid;
-  }
+  };
 
   componentDidMount = () => {
-    const { router, authActions } = this.props;
-    const uuid = this.createSession();
-
-    authActions.saveSession({
-      userId: uuid
-    });
-  }
+    this.createSession();
+  };
 
   render() {
     const { auth } = this.props;
 
     return (
       <div>
-        <div
-          onClick={this.createRoom}
-        >
-          ルームを作成してゲーム開始
-        </div>
-        <div>
-          ルームに参加してゲーム開始
-        </div>
+        <div onClick={this.createRoom}>ルームを作成してゲーム開始</div>
+        <div>ルームに参加してゲーム開始</div>
         {auth.rooms.map(roomId => (
-          <div
-            key={roomId}
-            onClick={this.selectRoom(roomId)}
-          >{roomId}</div>
+          <div key={roomId} onClick={this.selectRoom(roomId)}>
+            {roomId}
+          </div>
         ))}
       </div>
-    )
+    );
   }
 }
 
@@ -79,6 +67,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   systemActions: bindActionCreators(systemActions, dispatch),
   authActions: bindActionCreators(authActions, dispatch),
-})
+});
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);

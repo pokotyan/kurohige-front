@@ -2,7 +2,7 @@ import * as socketActions from '../actions/socket';
 
 const initialState = {
   reservedBox: {},
-  selectedBox: []
+  selectedBox: [],
 };
 
 export default (state = initialState, action) => {
@@ -10,12 +10,12 @@ export default (state = initialState, action) => {
     case socketActions.RESERVE_UPDATE:
       return {
         ...state,
-        reservedBox: action.payload.reservedBox
+        reservedBox: action.payload.reservedBox,
       };
     case socketActions.SELECTED_UPDATE:
       return {
         ...state,
-        selectedBox: action.payload.selectedBox
+        selectedBox: action.payload.selectedBox,
       };
     default:
       return state;

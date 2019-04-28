@@ -1,4 +1,4 @@
-import { put, take, all, fork, call, select } from 'redux-saga/effects';
+import { put, take, all, fork, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import * as socketActions from '../../actions/socket';
 import * as authActions from '../../actions/auth';
@@ -14,14 +14,16 @@ function* watchOnUsers() {
       yield fork(syncUserRoomRelation);
       yield fork(writeUserRoomRelation);
     } catch (err) {
-      console.error('socket error:', err)
+      throw new Error(err);
     }
   }
 }
 
 function* syncUserRoomRelation() {
   while (true) {
-    const { payload: { userId, roomId } } = yield take(socketActions.SYNC_USER_ROOM_RELATION);
+    const {
+      payload: { userId, roomId },
+    } = yield take(socketActions.SYNC_USER_ROOM_RELATION);
 
     yield socket.emit('broadCastPlayer', { userId, roomId });
     yield socket.emit('updatePlayer', { userId, roomId });
@@ -48,26 +50,24 @@ function subscribe() {
         if (myRoomId !== roomId) {
           return;
         }
-  
-        window.sessionStorage.setItem('userIds', JSON.stringify(userIds));      
-        emit(authActions.update({ userIds }));  
+
+        window.sessionStorage.setItem('userIds', JSON.stringify(userIds));
+        emit(authActions.update({ userIds }));
       } catch (e) {
         return;
       }
-    }
+    };
 
     socket.on('updatePlayer:receive', updatePlayer);
-    
+
     const unsubscribe = () => {
       socket.off('updatePlayer:receive', updatePlayer);
-    }
+    };
 
     return unsubscribe;
   });
 }
 
 export default function* rootSaga() {
-  yield all([
-    fork(watchOnUsers),
-  ]);
+  yield all([fork(watchOnUsers)]);
 }

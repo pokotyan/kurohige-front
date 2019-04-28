@@ -1,11 +1,6 @@
 import uuidv1 from 'uuid/v1';
 import _ from 'lodash';
-import {
-  put,
-  take,
-  all,
-  fork,
-} from 'redux-saga/effects';
+import { put, take, all, fork } from 'redux-saga/effects';
 import * as systemActions from '../actions/system';
 import * as authActions from '../actions/auth';
 import * as socketActions from '../actions/socket';
@@ -17,12 +12,12 @@ const _getRoomId = () => {
     return uuid;
   }
 
-  uuid = uuidv1()
+  uuid = uuidv1();
 
   window.sessionStorage.setItem('roomId', uuid);
 
   return uuid;
-}
+};
 
 function* createRoom() {
   for (;;) {
@@ -30,13 +25,17 @@ function* createRoom() {
 
     const roomId = _getRoomId();
 
-    yield put(socketActions.createRoom({
-      roomId
-    }));
+    yield put(
+      socketActions.createRoom({
+        roomId,
+      })
+    );
 
-    yield put(authActions.update({
-      roomId,
-    }));
+    yield put(
+      authActions.update({
+        roomId,
+      })
+    );
     yield fork(setPlayer1);
   }
 }
@@ -44,14 +43,12 @@ function* createRoom() {
 function* selectRoom() {
   for (;;) {
     const {
-      payload: {
-        roomId
-      }
+      payload: { roomId },
     } = yield take(systemActions.SELECT_ROOM);
 
     window.sessionStorage.setItem('roomId', roomId);
     authActions.update({
-      roomId
+      roomId,
     });
 
     yield fork(setPlayer2, roomId);
@@ -74,34 +71,39 @@ function* setPlayer2(roomId) {
   yield fork(setPlayer, 'p2');
 
   // 先攻はランダム
-  yield put(socketActions.syncTurn({
-    nextTurn: _.sample(['p1', 'p2']),
-    roomId,
-  }));
+  yield put(
+    socketActions.syncTurn({
+      nextTurn: _.sample(['p1', 'p2']),
+      roomId,
+    })
+  );
 
   // プレイヤー2まで参加したらそのルームには参加できなくするため消す
-  yield put(socketActions.deleteRoom({
-    roomId
-  }));
+  yield put(
+    socketActions.deleteRoom({
+      roomId,
+    })
+  );
 }
 
 function* setPlayer(player) {
   const userId = window.sessionStorage.getItem('userId');
   const roomId = window.sessionStorage.getItem('roomId');
 
-  yield put(socketActions.syncUserRoomRelation({
-    userId,
-    roomId
-  }));
+  yield put(
+    socketActions.syncUserRoomRelation({
+      userId,
+      roomId,
+    })
+  );
 
-  yield put(systemActions.setPlayer({
-    [player]: true
-  }));
+  yield put(
+    systemActions.setPlayer({
+      [player]: true,
+    })
+  );
 }
 
 export default function* rootSaga() {
-  yield all([
-    fork(createRoom),
-    fork(selectRoom),
-  ]);
+  yield all([fork(createRoom), fork(selectRoom)]);
 }
