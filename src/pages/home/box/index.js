@@ -3,7 +3,7 @@ import cx from 'classnames';
 import style from './style.css';
 
 export default class Box extends Component {
-  syncSelectStatus = () => {
+  syncSelectStatus = async () => {
     const {
       socketActions,
       gameActions,
@@ -15,18 +15,18 @@ export default class Box extends Component {
     } = this.props;
     const nextTurn = p1 ? 'p2' : 'p1';
 
-    socketActions.syncSelectStatus({
+    await socketActions.syncSelectStatus({
       boxId: id,
       userId,
       roomId,
     });
 
-    socketActions.syncTurn({
+    await socketActions.syncTurn({
       nextTurn,
       roomId,
     });
 
-    gameActions.judgeGame({
+    await gameActions.judgeGame({
       currentSelectBox: [...selectedBox, id],
     });
   };

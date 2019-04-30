@@ -15,6 +15,14 @@
   background-image: url("/static/grain.jpg")
 }
 
+.center {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media screen and (max-width: 480px) {
   .boxContainer {
     width: 325px;

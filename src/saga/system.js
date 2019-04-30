@@ -115,6 +115,13 @@ function* reloadData() {
     const p2UserId = window.sessionStorage.getItem('p2');
     const nextTurn = window.sessionStorage.getItem('nextTurn');
 
+    const isEndGame =
+      !roomId && !userIds && !p1UserId && !p2UserId && !nextTurn;
+
+    if (isEndGame) {
+      continue;
+    }
+
     yield put(
       socketActions.watchOnSelect({
         userId,
@@ -126,7 +133,7 @@ function* reloadData() {
       authActions.update({
         userId,
         roomId,
-        userIds: JSON.parse(userIds),
+        userIds: JSON.parse(userIds) || [],
       })
     );
 

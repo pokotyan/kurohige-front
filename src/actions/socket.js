@@ -22,6 +22,10 @@ export const WATCH_ON_TURN = Symbol('WATCH_ON_TURN');
 
 export const SYNC_TURN = Symbol('SYNC_TURN');
 
+export const WATCH_ON_JUDGE = Symbol('WATCH_ON_JUDGE');
+
+export const SYNC_JUDGE = Symbol('SYNC_JUDGE');
+
 export const watchOnRooms = payload => ({
   type: WATCH_ON_ROOMS,
   payload,
@@ -79,5 +83,15 @@ export const watchOnTurn = payload => ({
 
 export const syncTurn = payload => ({
   type: SYNC_TURN,
+  payload,
+});
+
+export const watchOnJudge = payload => ({
+  type: WATCH_ON_JUDGE,
+  payload,
+});
+
+export const syncJudge = payload => ({
+  type: SYNC_JUDGE,
   payload,
 });

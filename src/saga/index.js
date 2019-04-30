@@ -6,6 +6,7 @@ import watchOnSelect from './socket/watchOnSelect';
 import watchOnRooms from './socket/watchOnRooms';
 import watchOnUsers from './socket/watchOnUsers';
 import watchOnTurn from './socket/watchOnTurn';
+import watchOnJudge from './socket/watchOnJudge';
 
 export default function* rootSaga() {
   yield all([
@@ -15,8 +16,10 @@ export default function* rootSaga() {
     fork(watchOnRooms),
     fork(watchOnUsers),
     fork(watchOnTurn),
+    fork(watchOnJudge),
   ]);
   yield put(socketActions.watchOnRooms());
   yield put(socketActions.watchOnUsers());
   yield put(socketActions.watchOnTurn());
+  yield put(socketActions.watchOnJudge());
 }

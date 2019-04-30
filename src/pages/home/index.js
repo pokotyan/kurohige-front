@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'next/router';
+import Link from 'next/link';
 import Box from './box';
 import EndGame from './endGame';
 import * as socketActions from '../../actions/socket';
@@ -57,6 +58,19 @@ class Home extends Component {
       ui,
     } = this.props;
 
+    const isEndGame = !roomId && !userIds.length && !p1 && !nextTurn;
+
+    if (isEndGame) {
+      return (
+        <div className={css.center}>
+          <div>勝負はすでにつきました。トップに戻ってください</div>
+          <Link href="/">
+            <a>トップに戻る</a>
+          </Link>
+        </div>
+      );
+    }
+
     const me = p1 ? 'p1' : 'p2';
     const isMyTurn = nextTurn === me;
     const isWaitingPlayer = userIds.length < 2;
@@ -68,7 +82,7 @@ class Home extends Component {
         <div className={css.header}>
           roomId: {roomId}
           {isWaitingPlayer
-            ? ' ユーザーを待っています'
+            ? ' プレイヤーを待っています'
             : isMyTurn
             ? ` あなた(${myColor})のターン`
             : ' 相手のターン'}

@@ -1,6 +1,8 @@
 import { take, all, fork, put } from 'redux-saga/effects';
 import * as gameActions from '../actions/game';
+import * as socketActions from '../actions/socket';
 import * as uiActions from '../actions/ui';
+import * as authActions from '../actions/auth';
 
 function* judgeGame() {
   for (;;) {
@@ -74,6 +76,15 @@ function* judgeGame() {
     });
 
     if (isWin) {
+      const roomId = window.sessionStorage.getItem('roomId');
+
+      // 相手にLOSEと表示させる
+      yield put(
+        socketActions.syncJudge({
+          roomId,
+        })
+      );
+
       yield put(
         uiActions.endGame({
           message: 'WIN',
@@ -88,6 +99,14 @@ function* judgeGame() {
       window.sessionStorage.removeItem('p1');
       window.sessionStorage.removeItem('p2');
       window.sessionStorage.removeItem('nextTurn');
+
+      yield put(
+        authActions.update({
+          // roomId: null,
+          rooms: [],
+          // userIds: [],
+        })
+      );
     }
   }
 }
