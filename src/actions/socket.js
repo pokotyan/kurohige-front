@@ -26,6 +26,8 @@ export const WATCH_ON_JUDGE = Symbol('WATCH_ON_JUDGE');
 
 export const SYNC_JUDGE = Symbol('SYNC_JUDGE');
 
+export const DELETE_GAME_CACHE = Symbol('DELETE_GAME_CACHE');
+
 export const watchOnRooms = payload => ({
   type: WATCH_ON_ROOMS,
   payload,
@@ -93,5 +95,10 @@ export const watchOnJudge = payload => ({
 
 export const syncJudge = payload => ({
   type: SYNC_JUDGE,
+  payload,
+});
+
+export const deleteGameCache = payload => ({
+  type: DELETE_GAME_CACHE,
   payload,
 });

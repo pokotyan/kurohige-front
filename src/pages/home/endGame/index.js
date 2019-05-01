@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { withRouter } from 'next/router';
 import style from './style.css';
 
 class EndGame extends Component {
   goToTop = () => {
-    const { router } = this.props;
-
-    router.push('/');
+    // SPAの遷移だと、消したはずのsessionStrageがなぜか蘇るため、通常の画面遷移
+    window.location.replace('/');
   };
 
   render() {
@@ -31,4 +29,4 @@ class EndGame extends Component {
   }
 }
 
-export default withRouter(EndGame);
+export default EndGame;

@@ -2,7 +2,6 @@ import { take, all, fork, put } from 'redux-saga/effects';
 import * as gameActions from '../actions/game';
 import * as socketActions from '../actions/socket';
 import * as uiActions from '../actions/ui';
-import * as authActions from '../actions/auth';
 
 function* judgeGame() {
   for (;;) {
@@ -91,9 +90,6 @@ function* judgeGame() {
         })
       );
 
-      // @todo redisの有効期限を設定
-
-      // window.sessionStorage.removeItem('userId');
       window.sessionStorage.removeItem('roomId');
       window.sessionStorage.removeItem('userIds');
       window.sessionStorage.removeItem('p1');
@@ -101,10 +97,9 @@ function* judgeGame() {
       window.sessionStorage.removeItem('nextTurn');
 
       yield put(
-        authActions.update({
-          // roomId: null,
-          rooms: [],
-          // userIds: [],
+        socketActions.deleteGameCache({
+          roomId,
+          userId: window.sessionStorage.getItem('userId'),
         })
       );
     }

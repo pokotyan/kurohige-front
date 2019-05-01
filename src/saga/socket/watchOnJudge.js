@@ -2,7 +2,6 @@ import { put, take, all, fork, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import * as socketActions from '../../actions/socket';
 import * as uiActions from '../../actions/ui';
-import * as authActions from '../../actions/auth';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8999');
@@ -57,7 +56,6 @@ function subscribe() {
           })
         );
 
-        // window.sessionStorage.removeItem('userId');
         window.sessionStorage.removeItem('roomId');
         window.sessionStorage.removeItem('userIds');
         window.sessionStorage.removeItem('p1');
@@ -65,10 +63,9 @@ function subscribe() {
         window.sessionStorage.removeItem('nextTurn');
 
         emit(
-          authActions.update({
-            // roomId: null,
-            rooms: [],
-            // userIds: [],
+          socketActions.deleteGameCache({
+            roomId,
+            userId: window.sessionStorage.getItem('userId'),
           })
         );
       } catch (e) {

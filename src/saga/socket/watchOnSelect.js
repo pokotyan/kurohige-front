@@ -99,6 +99,16 @@ function subscribe() {
   });
 }
 
+function* deleteGameCache() {
+  while (true) {
+    const {
+      payload: { roomId, userId },
+    } = yield take(socketActions.DELETE_GAME_CACHE);
+
+    yield socket.emit('deleteGameCache', { roomId, userId });
+  }
+}
+
 export default function* rootSaga() {
-  yield all([fork(watchOnSelect)]);
+  yield all([fork(watchOnSelect), fork(deleteGameCache)]);
 }
