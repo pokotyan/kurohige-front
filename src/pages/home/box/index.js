@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
+import _ from 'lodash';
 import style from './style.css';
 
 export default class Box extends Component {
+  static getInitialProps() {
+    return {
+      socket: {
+        reservedBox: {},
+        selectedBox: [],
+      },
+    };
+  }
+
   syncSelectStatus = async () => {
     const {
       socketActions,
@@ -38,10 +48,54 @@ export default class Box extends Component {
     return nextTurn === me;
   };
 
+  getEnemyBox({ userId, roomId, reservedBox }) {
+    const enemyBox = [];
+
+    Object.keys(reservedBox).forEach(id => {
+      // ルームが同じで自分ではない => 相手の選んでいるbox
+      if (id.includes(roomId) && !id.includes(userId)) {
+        enemyBox.push(...reservedBox[id]);
+      }
+    });
+
+    return _.uniq(enemyBox);
+  }
+
+  getBoxType({ enemyBox, boxId, selectedBox }) {
+    const isEnemyBox = enemyBox.includes(boxId);
+    const isMyBox = selectedBox.includes(boxId);
+
+    return {
+      isEnemyBox,
+      isMyBox,
+    };
+  }
+
+  getSelectedAllBox(reservedBox) {
+    const selectedAllBox = [];
+
+    Object.keys(reservedBox).forEach(userRoomId => {
+      selectedAllBox.push(...reservedBox[userRoomId]);
+    });
+
+    return _.uniq(selectedAllBox);
+  }
+
   render() {
-    const { id, socket, userId, roomId, p1, p2 } = this.props;
-    const enemyBox = socket.getEnemyBox({ userId, roomId });
-    const { isEnemyBox, isMyBox } = socket.getBoxType({ enemyBox, boxId: id });
+    const {
+      id,
+      socket: { reservedBox, selectedBox },
+      userId,
+      roomId,
+      p1,
+      p2,
+    } = this.props;
+    const enemyBox = this.getEnemyBox({ userId, roomId, reservedBox });
+    const { isEnemyBox, isMyBox } = this.getBoxType({
+      enemyBox,
+      boxId: id,
+      selectedBox,
+    });
     const boxCss = cx({
       [style.base]: !isEnemyBox && !isMyBox,
       [style.isEnemyBoxBlack]: isEnemyBox && p2,
@@ -51,7 +105,8 @@ export default class Box extends Component {
     });
 
     const isMyTurn = this.isMyTurn();
-    const isAlreadySelected = socket.selectedAllBox.includes(id);
+    const selectedAllBox = this.getSelectedAllBox(reservedBox);
+    const isAlreadySelected = selectedAllBox.includes(id);
 
     return isMyTurn && !isAlreadySelected ? (
       <div className={boxCss} onClick={this.syncSelectStatus} />

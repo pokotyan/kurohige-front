@@ -1,5 +1,4 @@
 import * as socketActions from '../actions/socket';
-import socketDomain from '../domain/socket';
 
 const initialState = {
   reservedBox: {},
@@ -9,22 +8,18 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case socketActions.RESERVE_UPDATE: {
-      const domainSeed = {
+      return {
         ...state,
         reservedBox: action.payload.reservedBox,
       };
-
-      return socketDomain(domainSeed);
     }
     case socketActions.SELECTED_UPDATE: {
-      const domainSeed = {
+      return {
         ...state,
         selectedBox: action.payload.selectedBox,
       };
-
-      return socketDomain(domainSeed);
     }
     default:
-      return socketDomain(state);
+      return state;
   }
 };

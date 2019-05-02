@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Provider } from 'react-redux';
 import App, { Container } from 'next/app';
 import withRedux from 'next-redux-wrapper';
@@ -6,6 +5,16 @@ import store from '../store';
 import './reset.css';
 
 class Kurohige extends App {
+  static async getInitialProps({ Component, ctx, router }) {
+    let pageProps = {};
+
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps({ ctx, router });
+    }
+
+    return { pageProps };
+  }
+
   render() {
     const { Component, pageProps, store } = this.props;
 

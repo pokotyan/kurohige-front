@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "next ./src",
-    "build": "next build ./src",
     "start": "next start ./src",
+    "build": "next build ./src",
+    "export": "next export ./src",
+    "deploy": "npm run build && npm run export",
     "lint:fix": "eslint src --fix"
   },
   "husky": {
