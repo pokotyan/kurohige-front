@@ -4,8 +4,8 @@ import * as socketActions from '../../actions/socket';
 import * as authActions from '../../actions/auth';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:8999');
-// const socket = io('http://54.178.145.131');
+// const socket = io('http://localhost');
+const socket = io('http://18.179.22.249');
 
 function* watchOnSelect() {
   while (true) {
