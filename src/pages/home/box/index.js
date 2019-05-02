@@ -21,13 +21,13 @@ export default class Box extends Component {
       roomId,
     });
 
+    await gameActions.judgeGame({
+      currentSelectBox: [...selectedBox, id],
+    });
+
     await socketActions.syncTurn({
       nextTurn,
       roomId,
-    });
-
-    await gameActions.judgeGame({
-      currentSelectBox: [...selectedBox, id],
     });
   };
 

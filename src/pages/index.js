@@ -53,8 +53,8 @@ class App extends Component {
         <div className={css.center}>
           <img src="/static/title.png" />
         </div>
-        <div className={css.center} onClick={this.createRoom}>
-          ルームを作成してゲーム開始
+        <div className={`${css.center}`} onClick={this.createRoom}>
+          <a className="button is-success">ルームを作成してゲーム開始</a>
         </div>
         {isExistsRooms ? (
           <div>
@@ -64,7 +64,7 @@ class App extends Component {
                 className={css.center}
                 onClick={this.selectRoom(roomId)}
               >
-                {`ルームid: ${roomId} に参加してゲーム開始`}
+                <a className="button">{`ルームid: ${roomId} に参加してゲーム開始`}</a>
               </div>
             ))}
           </div>

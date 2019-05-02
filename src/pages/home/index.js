@@ -63,9 +63,11 @@ class Home extends Component {
     if (isEndGame) {
       return (
         <div className={css.center}>
-          <div>勝負はすでにつきました。トップに戻ってください</div>
+          <div>勝敗はすでにつきました。トップに戻ってください</div>
           <Link href="/">
-            <a>トップに戻る</a>
+            <div className={`button is-success ${css.goToTop}`}>
+              トップに戻る
+            </div>
           </Link>
         </div>
       );
@@ -80,12 +82,14 @@ class Home extends Component {
       <div className={css.container}>
         <EndGame isEndGame={ui.isEndGame} message={ui.message} />
         <div className={css.header}>
-          roomId: {roomId}
-          {isWaitingPlayer
-            ? ' プレイヤーを待っています'
-            : isMyTurn
-            ? ` あなた(${myColor})のターン`
-            : ' 相手のターン'}
+          <div>roomId: {roomId}</div>
+          <div className={css.turnInfo}>
+            {isWaitingPlayer
+              ? ' プレイヤーを待っています'
+              : isMyTurn
+              ? ` あなた(${myColor})のターン`
+              : ' 相手のターン'}
+          </div>
         </div>
         <div className={css.boxContainer}>{this.Boxlist()}</div>
       </div>

@@ -18,7 +18,7 @@ class EndGame extends Component {
               <div className={style.boxBg}>
                 {message}
                 <div className={style.goToTop} onClick={this.goToTop}>
-                  トップに戻る
+                  <a className="button is-success">トップに戻る</a>
                 </div>
               </div>
             </div>
